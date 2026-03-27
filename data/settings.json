@@ -1,0 +1,18 @@
+{
+  "whatsapp": "525512345678",
+  "instagram": "",
+  "facebook": "",
+  "address": "Cra. 85c #52B 04, Engativá, Bogotá, Cundinamarca",
+  "addressEn": "Cra. 85c #52B 04, Engativá, Bogotá, Cundinamarca, Colombia",
+  "hours": [
+    { "day": "Lunes – Jueves", "dayEn": "Monday – Thursday", "time": "5:00 PM – 1:00 AM" },
+    { "day": "Viernes – Sábado", "dayEn": "Friday – Saturday", "time": "4:00 PM – 3:00 AM" },
+    { "day": "Domingo", "dayEn": "Sunday", "time": "4:00 PM – 12:00 AM" }
+  ],
+  "specialNights": [
+    { "name": "Martes de Caguamas", "nameEn": "Caguama Tuesdays", "desc": "2x1 en caguamas toda la noche", "descEn": "2-for-1 caguamas all night" },
+    { "name": "Viernes de Mezcal", "nameEn": "Mezcal Fridays", "desc": "Mezcal artesanal a precio especial", "descEn": "Artisanal mezcal at special price" },
+    { "name": "Sábado de Fiesta", "nameEn": "Party Saturday", "desc": "Música, ambiente y las mejores vibras", "descEn": "Music, vibes and the best atmosphere" }
+  ],
+  "mapEmbedUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3739.7316617138895!2d-74.11753274610906!3d4.678638062038384!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3f9b6512718259%3A0x30968f8bbba339a9!2sDESMADRUGADOS!5e1!3m2!1ses-419!2sco!4v1774639477718!5m2!1ses-419!2sco"
+}

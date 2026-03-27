@@ -1,0 +1,8 @@
+{
+  "images": [
+    { "id": "1", "src": "/images/bar-1.png", "alt": "Ambiente Desmadrugados Bar", "altEn": "Desmadrugados Bar atmosphere" },
+    { "id": "2", "src": "/images/bar-2.png", "alt": "Interior del bar", "altEn": "Bar interior" },
+    { "id": "3", "src": "/images/bar-3.png", "alt": "Nuestro espacio", "altEn": "Our space" },
+    { "id": "4", "src": "/images/bar-4.png", "alt": "El lugar perfecto", "altEn": "The perfect spot" }
+  ]
+}

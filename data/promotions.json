@@ -1,0 +1,34 @@
+{
+  "items": [
+    {
+      "id": "1",
+      "title": "Martes de Caguamas",
+      "titleEn": "Caguama Tuesdays",
+      "description": "2x1 en caguamas todos los martes de 6pm a 10pm",
+      "descriptionEn": "2-for-1 caguamas every Tuesday from 6pm to 10pm",
+      "badge": "MARTES",
+      "badgeEn": "TUESDAY",
+      "active": true
+    },
+    {
+      "id": "2",
+      "title": "Viernes de Mezcal",
+      "titleEn": "Mezcal Fridays",
+      "description": "Copa de mezcal artesanal a $35 — solo los viernes",
+      "descriptionEn": "Artisanal mezcal shot for $35 — Fridays only",
+      "badge": "VIERNES",
+      "badgeEn": "FRIDAY",
+      "active": true
+    },
+    {
+      "id": "3",
+      "title": "Happy Hour",
+      "titleEn": "Happy Hour",
+      "description": "De 5pm a 7pm: todas las cervezas a precio especial",
+      "descriptionEn": "5pm to 7pm: all beers at special price",
+      "badge": "DIARIO",
+      "badgeEn": "DAILY",
+      "active": true
+    }
+  ]
+}
