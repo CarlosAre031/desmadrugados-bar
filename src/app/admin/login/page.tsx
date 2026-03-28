@@ -39,8 +39,8 @@ export default function LoginPage() {
           <Image
             src="/images/logo.png"
             alt="Desmadrugados Bar"
-            width={150}
-            height={150}
+            width={250}
+            height={250}
             className="object-contain"
           />
           <p className="text-muted-foreground text-xs mt-1 tracking-wider uppercase">

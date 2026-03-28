@@ -12,3 +12,6 @@ export type { IHours, ISpecialNight, ISettingsDocument } from './Settings'
 
 export { Carousel } from './Carousel'
 export type { ICarouselImage, ICarouselDocument } from './Carousel'
+
+export { Upload } from './Upload'
+export type { IUploadDocument } from './Upload'

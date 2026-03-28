@@ -189,7 +189,7 @@ export default function CarouselAdminPage() {
                   fill
                   className="object-cover"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  unoptimized={img.src.startsWith('http')}
+                  unoptimized
                 />
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
                   <button onClick={() => moveUp(i)} disabled={i === 0} className="p-2 bg-black/60 rounded hover:bg-[#D4A017] hover:text-black transition-all disabled:opacity-30">

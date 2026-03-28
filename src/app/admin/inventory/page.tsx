@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import { Plus, Pencil, Check, X, AlertTriangle, Trash2, Upload, ImageIcon } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
+import { CategoryManager, type Category } from '@/components/admin/CategoryManager'
 
 interface InventoryItem {
   id: string
@@ -23,12 +24,7 @@ interface InventoryData {
   items: InventoryItem[]
 }
 
-interface MenuCategory {
-  id: string
-  name: string
-  nameEn: string
-  icon: string
-}
+type MenuCategory = Category
 
 const UNITS = ['piezas', 'botellas', 'cajas', 'latas', 'bolsas']
 
@@ -75,7 +71,7 @@ function ItemRow({ item, categories, onSave, onDelete }: {
               {/* Image preview/upload */}
               <div className="relative w-12 h-12 rounded bg-card border border-border shrink-0 overflow-hidden">
                 {form.image ? (
-                  <Image src={form.image} alt="" fill className="object-cover" unoptimized={form.image.startsWith('http')} />
+                  <Image src={form.image} alt="" fill className="object-cover" unoptimized />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-muted-foreground">
                     <ImageIcon size={16} />
@@ -135,7 +131,7 @@ function ItemRow({ item, categories, onSave, onDelete }: {
           {/* Image */}
           <div className="w-10 h-10 rounded bg-card border border-border shrink-0 overflow-hidden">
             {item.image ? (
-              <Image src={item.image} alt={item.name} width={40} height={40} className="object-cover w-full h-full" unoptimized={item.image.startsWith('http')} />
+              <Image src={item.image} alt={item.name} width={40} height={40} className="object-cover w-full h-full" unoptimized />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-muted-foreground/30">
                 <ImageIcon size={14} />
@@ -256,6 +252,22 @@ export default function InventoryPage() {
           </button>
         </div>
       </div>
+
+      {/* Category manager - shared with menu */}
+      <CategoryManager
+        categories={categories}
+        onUpdate={async (updated) => {
+          setCategories(updated)
+          // Save categories to menu API
+          const menuRes = await fetch('/api/menu')
+          const menuData = await menuRes.json()
+          await fetch('/api/menu', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ...menuData, categories: updated }),
+          })
+        }}
+      />
 
       {lowStock.length > 0 && (
         <div className="mb-4 p-3 border border-[#B83232]/40 rounded bg-[#B83232]/10 flex items-center gap-2">

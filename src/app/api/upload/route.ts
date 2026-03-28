@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { isAuthenticated } from '@/lib/auth'
-import { writeFile } from 'fs/promises'
-import path from 'path'
+import { connectDB, isMongoDBConfigured } from '@/lib/mongodb'
+import { Upload } from '@/lib/models'
 
 export async function POST(req: NextRequest) {
   if (!(await isAuthenticated())) {
     return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
+  }
+
+  if (!isMongoDBConfigured()) {
+    return NextResponse.json({ error: 'MongoDB no configurado. Las imágenes requieren MongoDB.' }, { status: 500 })
   }
 
   const formData = await req.formData()
@@ -25,12 +29,24 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'El archivo es demasiado grande (máx 5MB)' }, { status: 400 })
   }
 
-  const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg'
-  const filename = `upload-${Date.now()}.${ext}`
-  const filepath = path.join(process.cwd(), 'public', 'uploads', filename)
+  try {
+    await connectDB()
 
-  const buffer = Buffer.from(await file.arrayBuffer())
-  await writeFile(filepath, buffer)
+    const buffer = Buffer.from(await file.arrayBuffer())
+    const base64 = buffer.toString('base64')
 
-  return NextResponse.json({ url: `/uploads/${filename}` })
+    const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg'
+    const filename = `upload-${Date.now()}.${ext}`
+
+    const upload = await Upload.create({
+      filename,
+      contentType: file.type,
+      data: base64,
+    })
+
+    return NextResponse.json({ url: `/api/images/${upload._id}` })
+  } catch (error) {
+    console.error('Error uploading file:', error)
+    return NextResponse.json({ error: 'Error al subir archivo' }, { status: 500 })
+  }
 }
