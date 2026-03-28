@@ -9,13 +9,15 @@ import Footer from '@/components/Footer'
 import FloatingButtons from '@/components/FloatingButtons'
 import HeroContent from '@/components/HeroContent'
 import BarPhrases from '@/components/BarPhrases'
-import { getMenu, getPromotions, getSettings, getCarousel } from '@/lib/data'
+import { getMenuDB, getPromotionsDB, getSettingsDB, getCarouselDB } from '@/lib/db'
 
-export default function Home() {
-  const menu = getMenu()
-  const promotions = getPromotions()
-  const settings = getSettings()
-  const carousel = getCarousel()
+export const dynamic = 'force-dynamic'
+
+export default async function Home() {
+  const menu = await getMenuDB()
+  const promotions = await getPromotionsDB()
+  const settings = await getSettingsDB()
+  const carousel = await getCarouselDB()
 
   return (
     <>

@@ -1,26 +1,3 @@
 {
-  "items": [
-    { "id": "1", "name": "Corona", "brand": "Corona", "presentation": "Botella 355ml", "category": "cervezas", "stock": 48, "minStock": 12, "unit": "piezas", "cost": 15, "price": 25, "image": "" },
-    { "id": "2", "name": "Modelo Especial", "brand": "Modelo", "presentation": "Botella 355ml", "category": "cervezas", "stock": 36, "minStock": 12, "unit": "piezas", "cost": 15, "price": 25, "image": "" },
-    { "id": "3", "name": "Victoria", "brand": "Victoria", "presentation": "Botella 355ml", "category": "cervezas", "stock": 24, "minStock": 12, "unit": "piezas", "cost": 13, "price": 22, "image": "" },
-    { "id": "4", "name": "XX Lager", "brand": "Dos Equis", "presentation": "Botella 355ml", "category": "cervezas", "stock": 24, "minStock": 12, "unit": "piezas", "cost": 13, "price": 22, "image": "" },
-    { "id": "5", "name": "Tecate", "brand": "Tecate", "presentation": "Lata 355ml", "category": "cervezas", "stock": 36, "minStock": 12, "unit": "piezas", "cost": 12, "price": 20, "image": "" },
-    { "id": "6", "name": "Indio", "brand": "Indio", "presentation": "Botella 355ml", "category": "cervezas", "stock": 24, "minStock": 12, "unit": "piezas", "cost": 13, "price": 22, "image": "" },
-    { "id": "7", "name": "Mezcal Copa", "brand": "Mezcal Artesanal", "presentation": "Copa 45ml", "category": "licores", "stock": 3, "minStock": 1, "unit": "botellas", "cost": 180, "price": 45, "image": "" },
-    { "id": "8", "name": "Tequila Copa", "brand": "José Cuervo", "presentation": "Copa 45ml", "category": "licores", "stock": 4, "minStock": 1, "unit": "botellas", "cost": 150, "price": 40, "image": "" },
-    { "id": "9", "name": "Ron Copa", "brand": "Bacardí", "presentation": "Copa 45ml", "category": "licores", "stock": 2, "minStock": 1, "unit": "botellas", "cost": 120, "price": 35, "image": "" },
-    { "id": "10", "name": "Vodka Copa", "brand": "Smirnoff", "presentation": "Copa 45ml", "category": "licores", "stock": 2, "minStock": 1, "unit": "botellas", "cost": 120, "price": 35, "image": "" },
-    { "id": "11", "name": "Whisky Copa", "brand": "Jack Daniel's", "presentation": "Copa 45ml", "category": "licores", "stock": 2, "minStock": 1, "unit": "botellas", "cost": 200, "price": 50, "image": "" },
-    { "id": "12", "name": "Marlboro Rojo", "brand": "Marlboro", "presentation": "Cajetilla 20 unidades", "category": "cigarrillos", "stock": 10, "minStock": 3, "unit": "cajas", "cost": 55, "price": 75, "image": "" },
-    { "id": "13", "name": "Marlboro Gold", "brand": "Marlboro", "presentation": "Cajetilla 20 unidades", "category": "cigarrillos", "stock": 8, "minStock": 3, "unit": "cajas", "cost": 55, "price": 75, "image": "" },
-    { "id": "14", "name": "Camel", "brand": "Camel", "presentation": "Cajetilla 20 unidades", "category": "cigarrillos", "stock": 6, "minStock": 3, "unit": "cajas", "cost": 50, "price": 70, "image": "" },
-    { "id": "15", "name": "Papas Sabritas", "brand": "Sabritas", "presentation": "Bolsa 45g", "category": "papas", "stock": 30, "minStock": 10, "unit": "piezas", "cost": 10, "price": 15, "image": "" },
-    { "id": "16", "name": "Papas Rancheritas", "brand": "Sabritas", "presentation": "Bolsa 45g", "category": "papas", "stock": 25, "minStock": 10, "unit": "piezas", "cost": 10, "price": 15, "image": "" },
-    { "id": "17", "name": "Agua Natural", "brand": "Cristal", "presentation": "Botella 500ml", "category": "aguas", "stock": 24, "minStock": 12, "unit": "piezas", "cost": 8, "price": 15, "image": "" },
-    { "id": "18", "name": "Coca-Cola", "brand": "Coca-Cola", "presentation": "Botella 400ml", "category": "gaseosas", "stock": 24, "minStock": 12, "unit": "piezas", "cost": 10, "price": 18, "image": "" },
-    { "id": "19", "name": "Sprite", "brand": "Sprite", "presentation": "Botella 400ml", "category": "gaseosas", "stock": 12, "minStock": 6, "unit": "piezas", "cost": 10, "price": 18, "image": "" },
-    { "id": "20", "name": "Gatorade", "brand": "Gatorade", "presentation": "Botella 500ml", "category": "hidratantes", "stock": 12, "minStock": 6, "unit": "piezas", "cost": 14, "price": 22, "image": "" },
-    { "id": "21", "name": "Red Bull", "brand": "Red Bull", "presentation": "Lata 250ml", "category": "energizantes", "stock": 12, "minStock": 6, "unit": "piezas", "cost": 22, "price": 35, "image": "" },
-    { "id": "22", "name": "Monster", "brand": "Monster", "presentation": "Lata 473ml", "category": "energizantes", "stock": 10, "minStock": 6, "unit": "piezas", "cost": 18, "price": 30, "image": "" }
-  ]
+  "items": []
 }
