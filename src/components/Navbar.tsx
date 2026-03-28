@@ -42,16 +42,10 @@ export default function Navbar() {
           <Image
             src="/images/logo.png"
             alt="Desmadrugados Bar"
-            width={40}
-            height={40}
-            className="object-contain"
+            width={60}
+            height={60}
+            className="object-contain h-14 w-14 sm:h-16 sm:w-16"
           />
-          <span
-            className="font-heading text-2xl text-[#D4A017] tracking-widest leading-none hidden sm:block"
-            style={{ textShadow: '0 0 8px rgba(212,160,23,0.4)' }}
-          >
-            DESMADRUGADOS
-          </span>
         </Link>
 
         {/* Desktop links */}

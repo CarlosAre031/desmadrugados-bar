@@ -22,7 +22,7 @@ export default function Home() {
       <Navbar />
       <main>
         {/* Hero */}
-        <section className="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
+        <section className="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden bg-black">
           <HeroCarousel images={carousel.images} />
           <HeroContent whatsapp={settings.whatsapp} />
         </section>

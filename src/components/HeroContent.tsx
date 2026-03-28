@@ -39,7 +39,7 @@ export default function HeroContent({ whatsapp }: Props) {
             href={waUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="px-8 py-4 font-heading text-2xl tracking-wider border border-white/40 text-white rounded hover:border-[#D4A017] hover:text-[#D4A017] transition-all min-h-[56px] flex items-center justify-center gap-2"
+            className="px-8 py-4 font-heading text-2xl tracking-wider border border-white/60 text-white rounded hover:border-[#D4A017] hover:text-[#D4A017] hover:bg-black/20 transition-all min-h-[56px] flex items-center justify-center gap-2"
           >
             <MessageCircle size={20} />
             {t.hero.ctaSub}

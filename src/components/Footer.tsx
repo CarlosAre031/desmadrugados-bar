@@ -42,9 +42,9 @@ export default function Footer({ instagram, facebook }: Props) {
               <Image
                 src="/images/logo.png"
                 alt="Desmadrugados Bar"
-                width={36}
-                height={36}
-                className="object-contain"
+                width={52}
+                height={52}
+                className="object-contain h-12 w-12"
               />
               <span className="font-heading text-2xl text-[#D4A017] tracking-widest">
                 DESMADRUGADOS
