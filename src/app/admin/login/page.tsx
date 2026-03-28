@@ -39,18 +39,13 @@ export default function LoginPage() {
           <Image
             src="/images/logo.png"
             alt="Desmadrugados Bar"
-            width={64}
-            height={64}
+            width={150}
+            height={150}
             className="object-contain"
           />
-          <div className="text-center">
-            <h1 className="font-heading text-4xl text-[#D4A017] tracking-widest">
-              DESMADRUGADOS
-            </h1>
-            <p className="text-muted-foreground text-xs mt-1 tracking-wider uppercase">
-              Panel de Administración
-            </p>
-          </div>
+          <p className="text-muted-foreground text-xs mt-1 tracking-wider uppercase">
+            Panel de Administración
+          </p>
         </div>
 
         {/* Form */}

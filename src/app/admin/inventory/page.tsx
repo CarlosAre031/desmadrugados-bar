@@ -23,7 +23,13 @@ interface InventoryData {
   items: InventoryItem[]
 }
 
-const CATEGORIES = ['cervezas', 'licores', 'cigarrillos', 'papas', 'aguas', 'gaseosas', 'hidratantes', 'energizantes']
+interface MenuCategory {
+  id: string
+  name: string
+  nameEn: string
+  icon: string
+}
+
 const UNITS = ['piezas', 'botellas', 'cajas', 'latas', 'bolsas']
 
 function StockBadge({ stock, min }: { stock: number; min: number }) {
@@ -32,8 +38,9 @@ function StockBadge({ stock, min }: { stock: number; min: number }) {
   return <Badge className="bg-green-700/20 text-green-400 border-green-700/30">OK</Badge>
 }
 
-function ItemRow({ item, onSave, onDelete }: {
+function ItemRow({ item, categories, onSave, onDelete }: {
   item: InventoryItem
+  categories: MenuCategory[]
   onSave: (item: InventoryItem) => void
   onDelete: (id: string) => void
 }) {
@@ -91,7 +98,7 @@ function ItemRow({ item, onSave, onDelete }: {
         </td>
         <td className="px-3 py-2 hidden md:table-cell">
           <select className="bg-card border border-border rounded px-2 py-1 text-sm outline-none focus:border-[#D4A017] w-full" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}>
-            {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
+            {categories.map((c) => <option key={c.id} value={c.id}>{c.icon} {c.name}</option>)}
           </select>
         </td>
         <td className="px-3 py-2">
@@ -145,7 +152,7 @@ function ItemRow({ item, onSave, onDelete }: {
         </div>
       </td>
       <td className="px-3 py-3 text-xs text-muted-foreground hidden sm:table-cell">{item.presentation}</td>
-      <td className="px-3 py-3 text-sm text-muted-foreground hidden md:table-cell capitalize">{item.category}</td>
+      <td className="px-3 py-3 text-sm text-muted-foreground hidden md:table-cell capitalize">{categories.find(c => c.id === item.category)?.icon} {categories.find(c => c.id === item.category)?.name || item.category}</td>
       <td className="px-3 py-3 text-sm font-heading text-xl text-foreground">{item.stock} <span className="text-xs text-muted-foreground font-mono">{item.unit}</span></td>
       <td className="px-3 py-3 text-sm text-muted-foreground hidden sm:table-cell">{item.minStock}</td>
       <td className="px-3 py-3 hidden lg:table-cell"><StockBadge stock={item.stock} min={item.minStock} /></td>
@@ -163,11 +170,12 @@ function ItemRow({ item, onSave, onDelete }: {
 
 export default function InventoryPage() {
   const [data, setData] = useState<InventoryData | null>(null)
+  const [categories, setCategories] = useState<MenuCategory[]>([])
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [newItem, setNewItem] = useState(false)
   const [form, setForm] = useState({
-    name: '', brand: '', presentation: '', category: 'cervezas',
+    name: '', brand: '', presentation: '', category: '',
     stock: 0, minStock: 5, unit: 'piezas', cost: 0, price: 0, image: ''
   })
   const [filter, setFilter] = useState('all')
@@ -176,6 +184,9 @@ export default function InventoryPage() {
 
   useEffect(() => {
     fetch('/api/inventory').then((r) => r.json()).then(setData)
+    fetch('/api/menu').then((r) => r.json()).then((menu) => {
+      setCategories(menu.categories || [])
+    })
   }, [])
 
   const save = async (updated: InventoryData) => {
@@ -221,7 +232,7 @@ export default function InventoryPage() {
     const next = { items: [...data.items, item] }
     setData(next)
     save(next)
-    setForm({ name: '', brand: '', presentation: '', category: 'cervezas', stock: 0, minStock: 5, unit: 'piezas', cost: 0, price: 0, image: '' })
+    setForm({ name: '', brand: '', presentation: '', category: '', stock: 0, minStock: 5, unit: 'piezas', cost: 0, price: 0, image: '' })
     setNewItem(false)
   }
 
@@ -263,16 +274,16 @@ export default function InventoryPage() {
         >
           Todos ({data.items.length})
         </button>
-        {CATEGORIES.map((c) => {
-          const count = data.items.filter(i => i.category === c).length
+        {categories.map((c) => {
+          const count = data.items.filter(i => i.category === c.id).length
           if (count === 0) return null
           return (
             <button
-              key={c}
-              onClick={() => setFilter(c)}
-              className={`px-3 py-1 text-xs rounded border transition-all capitalize ${filter === c ? 'bg-[#D4A017] text-black border-[#D4A017]' : 'border-border hover:border-[#D4A017]'}`}
+              key={c.id}
+              onClick={() => setFilter(c.id)}
+              className={`px-3 py-1 text-xs rounded border transition-all ${filter === c.id ? 'bg-[#D4A017] text-black border-[#D4A017]' : 'border-border hover:border-[#D4A017]'}`}
             >
-              {c} ({count})
+              {c.icon} {c.name} ({count})
             </button>
           )
         })}
@@ -305,7 +316,8 @@ export default function InventoryPage() {
             <input className="bg-background border border-border rounded px-3 py-2 text-sm focus:border-[#D4A017] outline-none" placeholder="Marca" value={form.brand} onChange={(e) => setForm({ ...form, brand: e.target.value })} />
             <input className="bg-background border border-border rounded px-3 py-2 text-sm focus:border-[#D4A017] outline-none" placeholder="Presentación (ej: Botella 355ml)" value={form.presentation} onChange={(e) => setForm({ ...form, presentation: e.target.value })} />
             <select className="bg-background border border-border rounded px-3 py-2 text-sm focus:border-[#D4A017] outline-none" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}>
-              {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
+              <option value="">Categoría *</option>
+              {categories.map((c) => <option key={c.id} value={c.id}>{c.icon} {c.name}</option>)}
             </select>
             <input type="number" className="bg-background border border-border rounded px-3 py-2 text-sm focus:border-[#D4A017] outline-none" placeholder="Stock" value={form.stock || ''} onChange={(e) => setForm({ ...form, stock: Number(e.target.value) })} />
             <input type="number" className="bg-background border border-border rounded px-3 py-2 text-sm focus:border-[#D4A017] outline-none" placeholder="Stock mínimo" value={form.minStock || ''} onChange={(e) => setForm({ ...form, minStock: Number(e.target.value) })} />
@@ -339,7 +351,7 @@ export default function InventoryPage() {
           </thead>
           <tbody>
             {filtered.map((item) => (
-              <ItemRow key={item.id} item={item} onSave={updateItem} onDelete={deleteItem} />
+              <ItemRow key={item.id} item={item} categories={categories} onSave={updateItem} onDelete={deleteItem} />
             ))}
           </tbody>
         </table>
