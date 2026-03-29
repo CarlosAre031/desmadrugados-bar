@@ -29,7 +29,7 @@ interface Props {
 }
 
 export default function Footer({ instagram, facebook }: Props) {
-  const { t } = useLanguage()
+  const { lang, t } = useLanguage()
   const year = new Date().getFullYear()
 
   return (
@@ -87,8 +87,21 @@ export default function Footer({ instagram, facebook }: Props) {
 
         <Separator className="mb-6 opacity-30" />
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 text-xs text-muted-foreground">
+        <div className="flex flex-col items-center gap-2 text-xs text-muted-foreground">
           <p>© {year} Desmadrugados Bar. {t.footer.rights}</p>
+          <p className="flex items-center gap-1">
+            {lang === 'es' ? 'Desarrollado por' : 'Developed by'}{' '}
+            <a
+              href="https://portafolio-jhan.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gold hover:text-orange-bar transition-colors font-semibold"
+            >
+              Jhan Arevalo
+            </a>
+            <span className="text-muted-foreground/50 mx-1">·</span>
+            <span className="font-semibold tracking-wide text-foreground/60">Apolsoft</span>
+          </p>
         </div>
       </div>
     </footer>

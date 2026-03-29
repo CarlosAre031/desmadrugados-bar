@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Save, Plus, Trash2 } from 'lucide-react'
+import { Save, Plus, Trash2, Lock, Eye, EyeOff } from 'lucide-react'
 
 interface Hour { day: string; dayEn: string; time: string }
 interface SpecialNight { name: string; nameEn: string; desc: string; descEn: string }
@@ -64,6 +64,43 @@ export default function SettingsPage() {
   const removeNight = (i: number) => {
     if (!data) return
     setData({ ...data, specialNights: data.specialNights.filter((_, idx) => idx !== i) })
+  }
+
+  // Password change state
+  const [currentPass, setCurrentPass] = useState('')
+  const [newPass, setNewPass] = useState('')
+  const [confirmPass, setConfirmPass] = useState('')
+  const [showPass, setShowPass] = useState(false)
+  const [passMsg, setPassMsg] = useState<{ type: 'ok' | 'err'; text: string } | null>(null)
+  const [savingPass, setSavingPass] = useState(false)
+
+  const changePassword = async () => {
+    if (!currentPass || !newPass) return
+    if (newPass !== confirmPass) {
+      setPassMsg({ type: 'err', text: 'Las contraseñas no coinciden' })
+      return
+    }
+    if (newPass.length < 6) {
+      setPassMsg({ type: 'err', text: 'Mínimo 6 caracteres' })
+      return
+    }
+    setSavingPass(true)
+    setPassMsg(null)
+    const res = await fetch('/api/auth', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ currentPassword: currentPass, newPassword: newPass }),
+    })
+    const json = await res.json()
+    if (res.ok) {
+      setPassMsg({ type: 'ok', text: 'Contraseña cambiada. Recuerda actualizarla también en Vercel (ADMIN_PASSWORD).' })
+      setCurrentPass('')
+      setNewPass('')
+      setConfirmPass('')
+    } else {
+      setPassMsg({ type: 'err', text: json.error || 'Error al cambiar contraseña' })
+    }
+    setSavingPass(false)
   }
 
   if (!data) return <div className="text-muted-foreground text-sm">Cargando...</div>
@@ -198,6 +235,67 @@ export default function SettingsPage() {
                 </div>
               </div>
             ))}
+          </div>
+        </section>
+
+        {/* Change Password */}
+        <section className="border border-border rounded p-5 bg-card">
+          <div className="flex items-center gap-2 mb-4">
+            <Lock size={16} className="text-gold" />
+            <h2 className="font-heading text-2xl text-foreground tracking-wider">Cambiar Contraseña</h2>
+          </div>
+          <div className="flex flex-col gap-3">
+            <div>
+              <label className="text-xs text-muted-foreground mb-1 block">Contraseña actual</label>
+              <div className="relative">
+                <input
+                  type={showPass ? 'text' : 'password'}
+                  className="w-full bg-background border border-border rounded px-3 py-2 text-sm outline-none focus:border-gold pr-10"
+                  value={currentPass}
+                  onChange={(e) => setCurrentPass(e.target.value)}
+                  placeholder="••••••••"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPass(!showPass)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                >
+                  {showPass ? <EyeOff size={14} /> : <Eye size={14} />}
+                </button>
+              </div>
+            </div>
+            <div>
+              <label className="text-xs text-muted-foreground mb-1 block">Nueva contraseña</label>
+              <input
+                type={showPass ? 'text' : 'password'}
+                className="w-full bg-background border border-border rounded px-3 py-2 text-sm outline-none focus:border-gold"
+                value={newPass}
+                onChange={(e) => setNewPass(e.target.value)}
+                placeholder="Mínimo 6 caracteres"
+              />
+            </div>
+            <div>
+              <label className="text-xs text-muted-foreground mb-1 block">Confirmar nueva contraseña</label>
+              <input
+                type={showPass ? 'text' : 'password'}
+                className="w-full bg-background border border-border rounded px-3 py-2 text-sm outline-none focus:border-gold"
+                value={confirmPass}
+                onChange={(e) => setConfirmPass(e.target.value)}
+                placeholder="Repite la nueva contraseña"
+              />
+            </div>
+            {passMsg && (
+              <p className={`text-sm ${passMsg.type === 'ok' ? 'text-green-500' : 'text-red-bar'}`}>
+                {passMsg.text}
+              </p>
+            )}
+            <button
+              onClick={changePassword}
+              disabled={savingPass || !currentPass || !newPass || !confirmPass}
+              className="flex items-center gap-2 px-4 py-2 bg-gold text-black font-semibold text-sm rounded hover:bg-orange-bar transition-all disabled:opacity-50 w-fit min-h-[40px]"
+            >
+              <Lock size={14} /> {savingPass ? 'Cambiando...' : 'Cambiar contraseña'}
+            </button>
           </div>
         </section>
       </div>

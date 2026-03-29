@@ -1,12 +1,12 @@
-import { getMenu, getInventory, getPromotions, getSettings } from '@/lib/data'
+import { getMenuDB, getInventoryDB, getPromotionsDB, getSettingsDB } from '@/lib/db'
 import Link from 'next/link'
 import { UtensilsCrossed, Package, Megaphone, Images, Settings, AlertTriangle } from 'lucide-react'
 
-export default function DashboardPage() {
-  const menu = getMenu()
-  const inventory = getInventory()
-  const promotions = getPromotions()
-  const settings = getSettings()
+export default async function DashboardPage() {
+  const menu = await getMenuDB()
+  const inventory = await getInventoryDB()
+  const promotions = await getPromotionsDB()
+  const settings = await getSettingsDB()
 
   const lowStock = inventory.items.filter((i) => i.stock <= i.minStock)
   const activePromos = promotions.items.filter((p) => p.active).length
