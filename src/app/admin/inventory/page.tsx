@@ -29,8 +29,8 @@ type MenuCategory = Category
 const UNITS = ['piezas', 'botellas', 'cajas', 'latas', 'bolsas']
 
 function StockBadge({ stock, min }: { stock: number; min: number }) {
-  if (stock === 0) return <Badge className="bg-[#B83232]/20 text-[#B83232] border-[#B83232]/30">Agotado</Badge>
-  if (stock <= min) return <Badge className="bg-[#C96A1A]/20 text-[#C96A1A] border-[#C96A1A]/30">Stock bajo</Badge>
+  if (stock === 0) return <Badge className="bg-red-bar/20 text-red-bar border-red-bar/30">Agotado</Badge>
+  if (stock <= min) return <Badge className="bg-orange-bar/20 text-orange-bar border-orange-bar/30">Stock bajo</Badge>
   return <Badge className="bg-green-700/20 text-green-400 border-green-700/30">OK</Badge>
 }
 
@@ -82,42 +82,42 @@ function ItemRow({ item, categories, onSave, onDelete }: {
               <button
                 onClick={() => fileRef.current?.click()}
                 disabled={uploading}
-                className="p-1.5 border border-border rounded hover:border-[#D4A017] hover:text-[#D4A017] transition-colors text-xs"
+                className="p-1.5 border border-border rounded hover:border-gold hover:text-gold transition-colors text-xs"
               >
                 {uploading ? '...' : <Upload size={12} />}
               </button>
             </div>
-            <input className="w-full bg-card border border-[#D4A017] rounded px-2 py-1 text-sm outline-none" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Nombre" />
-            <input className="w-full bg-card border border-border rounded px-2 py-1 text-sm outline-none focus:border-[#D4A017]" value={form.brand} onChange={(e) => setForm({ ...form, brand: e.target.value })} placeholder="Marca" />
-            <input className="w-full bg-card border border-border rounded px-2 py-1 text-sm outline-none focus:border-[#D4A017]" value={form.presentation} onChange={(e) => setForm({ ...form, presentation: e.target.value })} placeholder="Presentación (ej: Botella 355ml)" />
+            <input className="w-full bg-card border border-gold rounded px-2 py-1 text-sm outline-none" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Nombre" />
+            <input className="w-full bg-card border border-border rounded px-2 py-1 text-sm outline-none focus:border-gold" value={form.brand} onChange={(e) => setForm({ ...form, brand: e.target.value })} placeholder="Marca" />
+            <input className="w-full bg-card border border-border rounded px-2 py-1 text-sm outline-none focus:border-gold" value={form.presentation} onChange={(e) => setForm({ ...form, presentation: e.target.value })} placeholder="Presentación (ej: Botella 355ml)" />
           </div>
         </td>
         <td className="px-3 py-2 hidden md:table-cell">
-          <select className="bg-card border border-border rounded px-2 py-1 text-sm outline-none focus:border-[#D4A017] w-full" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}>
+          <select className="bg-card border border-border rounded px-2 py-1 text-sm outline-none focus:border-gold w-full" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}>
             {categories.map((c) => <option key={c.id} value={c.id}>{c.icon} {c.name}</option>)}
           </select>
         </td>
         <td className="px-3 py-2">
-          <input type="number" className="w-16 bg-card border border-border rounded px-2 py-1 text-sm outline-none focus:border-[#D4A017]" value={form.stock} onChange={(e) => setForm({ ...form, stock: Number(e.target.value) })} />
+          <input type="number" className="w-16 bg-card border border-border rounded px-2 py-1 text-sm outline-none focus:border-gold" value={form.stock} onChange={(e) => setForm({ ...form, stock: Number(e.target.value) })} />
         </td>
         <td className="px-3 py-2 hidden sm:table-cell">
-          <input type="number" className="w-14 bg-card border border-border rounded px-2 py-1 text-sm outline-none focus:border-[#D4A017]" value={form.minStock} onChange={(e) => setForm({ ...form, minStock: Number(e.target.value) })} />
+          <input type="number" className="w-14 bg-card border border-border rounded px-2 py-1 text-sm outline-none focus:border-gold" value={form.minStock} onChange={(e) => setForm({ ...form, minStock: Number(e.target.value) })} />
         </td>
         <td className="px-3 py-2 hidden lg:table-cell">
-          <select className="bg-card border border-border rounded px-2 py-1 text-sm outline-none focus:border-[#D4A017]" value={form.unit} onChange={(e) => setForm({ ...form, unit: e.target.value })}>
+          <select className="bg-card border border-border rounded px-2 py-1 text-sm outline-none focus:border-gold" value={form.unit} onChange={(e) => setForm({ ...form, unit: e.target.value })}>
             {UNITS.map((u) => <option key={u} value={u}>{u}</option>)}
           </select>
         </td>
         <td className="px-3 py-2 hidden lg:table-cell">
-          <input type="number" className="w-16 bg-card border border-border rounded px-2 py-1 text-sm outline-none focus:border-[#D4A017]" value={form.cost} onChange={(e) => setForm({ ...form, cost: Number(e.target.value) })} />
+          <input type="number" className="w-16 bg-card border border-border rounded px-2 py-1 text-sm outline-none focus:border-gold" value={form.cost} onChange={(e) => setForm({ ...form, cost: Number(e.target.value) })} />
         </td>
         <td className="px-3 py-2 hidden sm:table-cell">
-          <input type="number" className="w-16 bg-card border border-border rounded px-2 py-1 text-sm outline-none focus:border-[#D4A017]" value={form.price} onChange={(e) => setForm({ ...form, price: Number(e.target.value) })} />
+          <input type="number" className="w-16 bg-card border border-border rounded px-2 py-1 text-sm outline-none focus:border-gold" value={form.price} onChange={(e) => setForm({ ...form, price: Number(e.target.value) })} />
         </td>
         <td className="px-3 py-2">
           <div className="flex gap-1">
-            <button onClick={save} className="p-1.5 bg-[#D4A017] text-black rounded hover:bg-[#C96A1A] transition-colors"><Check size={13} /></button>
-            <button onClick={() => setEditing(false)} className="p-1.5 border border-border rounded hover:border-[#B83232] hover:text-[#B83232] transition-colors"><X size={13} /></button>
+            <button onClick={save} className="p-1.5 bg-gold text-black rounded hover:bg-orange-bar transition-colors"><Check size={13} /></button>
+            <button onClick={() => setEditing(false)} className="p-1.5 border border-border rounded hover:border-red-bar hover:text-red-bar transition-colors"><X size={13} /></button>
           </div>
         </td>
       </tr>
@@ -125,7 +125,7 @@ function ItemRow({ item, categories, onSave, onDelete }: {
   }
 
   return (
-    <tr className={`border-b border-border hover:bg-secondary/10 transition-colors ${item.stock <= item.minStock ? 'bg-[#B83232]/5' : ''}`}>
+    <tr className={`border-b border-border hover:bg-secondary/10 transition-colors ${item.stock <= item.minStock ? 'bg-red-bar/5' : ''}`}>
       <td className="px-3 py-3">
         <div className="flex items-center gap-3">
           {/* Image */}
@@ -140,7 +140,7 @@ function ItemRow({ item, categories, onSave, onDelete }: {
           </div>
           <div className="flex flex-col min-w-0">
             <span className="text-sm font-medium flex items-center gap-2 text-foreground">
-              {item.stock <= item.minStock && <AlertTriangle size={12} className="text-[#B83232] shrink-0" />}
+              {item.stock <= item.minStock && <AlertTriangle size={12} className="text-red-bar shrink-0" />}
               {item.name}
             </span>
             <span className="text-xs text-muted-foreground truncate">{item.brand}</span>
@@ -153,11 +153,11 @@ function ItemRow({ item, categories, onSave, onDelete }: {
       <td className="px-3 py-3 text-sm text-muted-foreground hidden sm:table-cell">{item.minStock}</td>
       <td className="px-3 py-3 hidden lg:table-cell"><StockBadge stock={item.stock} min={item.minStock} /></td>
       <td className="px-3 py-3 text-sm text-muted-foreground hidden lg:table-cell">${item.cost}</td>
-      <td className="px-3 py-3 text-sm text-[#D4A017] font-heading text-lg hidden sm:table-cell">${item.price}</td>
+      <td className="px-3 py-3 text-sm text-gold font-heading text-lg hidden sm:table-cell">${item.price}</td>
       <td className="px-3 py-3">
         <div className="flex gap-1">
-          <button onClick={() => { setForm(item); setEditing(true) }} className="p-1.5 border border-border rounded hover:border-[#D4A017] hover:text-[#D4A017] transition-colors"><Pencil size={13} /></button>
-          <button onClick={() => onDelete(item.id)} className="p-1.5 border border-border rounded hover:border-[#B83232] hover:text-[#B83232] transition-colors"><Trash2 size={13} /></button>
+          <button onClick={() => { setForm(item); setEditing(true) }} className="p-1.5 border border-border rounded hover:border-gold hover:text-gold transition-colors"><Pencil size={13} /></button>
+          <button onClick={() => onDelete(item.id)} className="p-1.5 border border-border rounded hover:border-red-bar hover:text-red-bar transition-colors"><Trash2 size={13} /></button>
         </div>
       </td>
     </tr>
@@ -241,13 +241,13 @@ export default function InventoryPage() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="font-heading text-4xl text-[#D4A017] tracking-wider">Inventario</h1>
+          <h1 className="font-heading text-4xl text-gold tracking-wider">Inventario</h1>
           <p className="text-muted-foreground text-sm">{data.items.length} productos registrados</p>
         </div>
         <div className="flex items-center gap-3">
           {saved && <span className="text-xs text-green-400">✓ Guardado</span>}
           {saving && <span className="text-xs text-muted-foreground">Guardando...</span>}
-          <button onClick={() => setNewItem(true)} className="flex items-center gap-2 px-4 py-2 bg-[#D4A017] text-black font-semibold text-sm rounded hover:bg-[#C96A1A] transition-all min-h-[40px]">
+          <button onClick={() => setNewItem(true)} className="flex items-center gap-2 px-4 py-2 bg-gold text-black font-semibold text-sm rounded hover:bg-orange-bar transition-all min-h-[40px]">
             <Plus size={16} /> Agregar
           </button>
         </div>
@@ -270,9 +270,9 @@ export default function InventoryPage() {
       />
 
       {lowStock.length > 0 && (
-        <div className="mb-4 p-3 border border-[#B83232]/40 rounded bg-[#B83232]/10 flex items-center gap-2">
-          <AlertTriangle size={16} className="text-[#B83232]" />
-          <p className="text-sm text-[#B83232] font-medium">
+        <div className="mb-4 p-3 border border-red-bar/40 rounded bg-red-bar/10 flex items-center gap-2">
+          <AlertTriangle size={16} className="text-red-bar" />
+          <p className="text-sm text-red-bar font-medium">
             {lowStock.length} producto{lowStock.length > 1 ? 's' : ''} con stock bajo o agotado
           </p>
         </div>
@@ -282,7 +282,7 @@ export default function InventoryPage() {
       <div className="flex flex-wrap gap-2 mb-4">
         <button
           onClick={() => setFilter('all')}
-          className={`px-3 py-1 text-xs rounded border transition-all ${filter === 'all' ? 'bg-[#D4A017] text-black border-[#D4A017]' : 'border-border hover:border-[#D4A017]'}`}
+          className={`px-3 py-1 text-xs rounded border transition-all ${filter === 'all' ? 'bg-gold text-black border-gold' : 'border-border hover:border-gold'}`}
         >
           Todos ({data.items.length})
         </button>
@@ -293,7 +293,7 @@ export default function InventoryPage() {
             <button
               key={c.id}
               onClick={() => setFilter(c.id)}
-              className={`px-3 py-1 text-xs rounded border transition-all ${filter === c.id ? 'bg-[#D4A017] text-black border-[#D4A017]' : 'border-border hover:border-[#D4A017]'}`}
+              className={`px-3 py-1 text-xs rounded border transition-all ${filter === c.id ? 'bg-gold text-black border-gold' : 'border-border hover:border-gold'}`}
             >
               {c.icon} {c.name} ({count})
             </button>
@@ -302,7 +302,7 @@ export default function InventoryPage() {
       </div>
 
       {newItem && (
-        <div className="mb-4 p-4 border border-[#D4A017]/40 rounded bg-card">
+        <div className="mb-4 p-4 border border-gold/40 rounded bg-card">
           <p className="text-sm font-semibold mb-3">Nuevo producto</p>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
             {/* Image upload */}
@@ -316,31 +316,31 @@ export default function InventoryPage() {
               </div>
               <div className="flex flex-col gap-1">
                 <input ref={fileRef} type="file" accept="image/*" onChange={handleNewImageUpload} className="hidden" />
-                <button onClick={() => fileRef.current?.click()} disabled={uploading} className="px-3 py-1.5 text-xs border border-border rounded hover:border-[#D4A017] hover:text-[#D4A017] transition-colors">
+                <button onClick={() => fileRef.current?.click()} disabled={uploading} className="px-3 py-1.5 text-xs border border-border rounded hover:border-gold hover:text-gold transition-colors">
                   {uploading ? 'Subiendo...' : 'Subir imagen'}
                 </button>
                 {form.image && (
-                  <button onClick={() => setForm({ ...form, image: '' })} className="text-xs text-muted-foreground hover:text-[#B83232]">Quitar</button>
+                  <button onClick={() => setForm({ ...form, image: '' })} className="text-xs text-muted-foreground hover:text-red-bar">Quitar</button>
                 )}
               </div>
             </div>
-            <input className="bg-background border border-border rounded px-3 py-2 text-sm focus:border-[#D4A017] outline-none" placeholder="Nombre *" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
-            <input className="bg-background border border-border rounded px-3 py-2 text-sm focus:border-[#D4A017] outline-none" placeholder="Marca" value={form.brand} onChange={(e) => setForm({ ...form, brand: e.target.value })} />
-            <input className="bg-background border border-border rounded px-3 py-2 text-sm focus:border-[#D4A017] outline-none" placeholder="Presentación (ej: Botella 355ml)" value={form.presentation} onChange={(e) => setForm({ ...form, presentation: e.target.value })} />
-            <select className="bg-background border border-border rounded px-3 py-2 text-sm focus:border-[#D4A017] outline-none" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}>
+            <input className="bg-background border border-border rounded px-3 py-2 text-sm focus:border-gold outline-none" placeholder="Nombre *" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+            <input className="bg-background border border-border rounded px-3 py-2 text-sm focus:border-gold outline-none" placeholder="Marca" value={form.brand} onChange={(e) => setForm({ ...form, brand: e.target.value })} />
+            <input className="bg-background border border-border rounded px-3 py-2 text-sm focus:border-gold outline-none" placeholder="Presentación (ej: Botella 355ml)" value={form.presentation} onChange={(e) => setForm({ ...form, presentation: e.target.value })} />
+            <select className="bg-background border border-border rounded px-3 py-2 text-sm focus:border-gold outline-none" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}>
               <option value="">Categoría *</option>
               {categories.map((c) => <option key={c.id} value={c.id}>{c.icon} {c.name}</option>)}
             </select>
-            <input type="number" className="bg-background border border-border rounded px-3 py-2 text-sm focus:border-[#D4A017] outline-none" placeholder="Stock" value={form.stock || ''} onChange={(e) => setForm({ ...form, stock: Number(e.target.value) })} />
-            <input type="number" className="bg-background border border-border rounded px-3 py-2 text-sm focus:border-[#D4A017] outline-none" placeholder="Stock mínimo" value={form.minStock || ''} onChange={(e) => setForm({ ...form, minStock: Number(e.target.value) })} />
-            <select className="bg-background border border-border rounded px-3 py-2 text-sm focus:border-[#D4A017] outline-none" value={form.unit} onChange={(e) => setForm({ ...form, unit: e.target.value })}>
+            <input type="number" className="bg-background border border-border rounded px-3 py-2 text-sm focus:border-gold outline-none" placeholder="Stock" value={form.stock || ''} onChange={(e) => setForm({ ...form, stock: Number(e.target.value) })} />
+            <input type="number" className="bg-background border border-border rounded px-3 py-2 text-sm focus:border-gold outline-none" placeholder="Stock mínimo" value={form.minStock || ''} onChange={(e) => setForm({ ...form, minStock: Number(e.target.value) })} />
+            <select className="bg-background border border-border rounded px-3 py-2 text-sm focus:border-gold outline-none" value={form.unit} onChange={(e) => setForm({ ...form, unit: e.target.value })}>
               {UNITS.map((u) => <option key={u} value={u}>{u}</option>)}
             </select>
-            <input type="number" className="bg-background border border-border rounded px-3 py-2 text-sm focus:border-[#D4A017] outline-none" placeholder="Costo $" value={form.cost || ''} onChange={(e) => setForm({ ...form, cost: Number(e.target.value) })} />
-            <input type="number" className="bg-background border border-border rounded px-3 py-2 text-sm focus:border-[#D4A017] outline-none" placeholder="Precio venta $" value={form.price || ''} onChange={(e) => setForm({ ...form, price: Number(e.target.value) })} />
+            <input type="number" className="bg-background border border-border rounded px-3 py-2 text-sm focus:border-gold outline-none" placeholder="Costo $" value={form.cost || ''} onChange={(e) => setForm({ ...form, cost: Number(e.target.value) })} />
+            <input type="number" className="bg-background border border-border rounded px-3 py-2 text-sm focus:border-gold outline-none" placeholder="Precio venta $" value={form.price || ''} onChange={(e) => setForm({ ...form, price: Number(e.target.value) })} />
             <div className="flex gap-2 col-span-2 sm:col-span-1">
-              <button onClick={addItem} className="flex-1 py-2 bg-[#D4A017] text-black font-semibold text-sm rounded hover:bg-[#C96A1A] transition-all">Guardar</button>
-              <button onClick={() => setNewItem(false)} className="px-3 py-2 border border-border rounded hover:border-[#B83232] hover:text-[#B83232] transition-all"><X size={16} /></button>
+              <button onClick={addItem} className="flex-1 py-2 bg-gold text-black font-semibold text-sm rounded hover:bg-orange-bar transition-all">Guardar</button>
+              <button onClick={() => setNewItem(false)} className="px-3 py-2 border border-border rounded hover:border-red-bar hover:text-red-bar transition-all"><X size={16} /></button>
             </div>
           </div>
         </div>

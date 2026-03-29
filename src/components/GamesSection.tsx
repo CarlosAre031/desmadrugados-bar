@@ -67,7 +67,7 @@ function PicoBottle() {
     return (
       <div className="w-full max-w-md mx-auto">
         <div className="text-center mb-6">
-          <h3 className="font-heading text-3xl text-[#D4A017] mb-2">
+          <h3 className="font-heading text-3xl text-gold mb-2">
             {lang === 'es' ? 'Registra a los jugadores' : 'Register players'}
           </h3>
           <p className="text-sm text-muted-foreground">
@@ -83,13 +83,13 @@ function PicoBottle() {
             onChange={e => setNewName(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && addPlayer()}
             placeholder={lang === 'es' ? 'Nombre...' : 'Name...'}
-            className="flex-1 bg-background border border-border rounded px-3 py-2 text-sm focus:border-[#D4A017] outline-none"
+            className="flex-1 bg-background border border-border rounded px-3 py-2 text-sm focus:border-gold outline-none"
             maxLength={15}
           />
           <select
             value={newGender}
             onChange={e => setNewGender(e.target.value as 'M' | 'F' | 'X')}
-            className="bg-background border border-border rounded px-2 py-2 text-sm focus:border-[#D4A017] outline-none"
+            className="bg-background border border-border rounded px-2 py-2 text-sm focus:border-gold outline-none"
           >
             <option value="M">{lang === 'es' ? '♂ H' : '♂ M'}</option>
             <option value="F">{lang === 'es' ? '♀ M' : '♀ F'}</option>
@@ -98,7 +98,7 @@ function PicoBottle() {
           <button
             onClick={addPlayer}
             disabled={!newName.trim() || players.length >= 12}
-            className="p-2 bg-[#D4A017] text-black rounded hover:bg-[#C96A1A] disabled:opacity-50 transition-all min-w-[44px]"
+            className="p-2 bg-gold text-black rounded hover:bg-orange-bar disabled:opacity-50 transition-all min-w-[44px]"
           >
             <Plus size={18} />
           </button>
@@ -114,7 +114,7 @@ function PicoBottle() {
             >
               <User size={14} style={{ color: genderColors[p.gender] }} />
               <span className="text-foreground">{p.name}</span>
-              <button onClick={() => removePlayer(p.id)} className="text-muted-foreground hover:text-[#B83232] transition-colors">
+              <button onClick={() => removePlayer(p.id)} className="text-muted-foreground hover:text-red-bar transition-colors">
                 <Trash2 size={12} />
               </button>
             </div>
@@ -124,7 +124,7 @@ function PicoBottle() {
         <button
           onClick={startGame}
           disabled={players.length < 2}
-          className="w-full py-4 font-heading text-2xl tracking-wider bg-[#D4A017] text-black rounded hover:bg-[#C96A1A] disabled:opacity-50 transition-all"
+          className="w-full py-4 font-heading text-2xl tracking-wider bg-gold text-black rounded hover:bg-orange-bar disabled:opacity-50 transition-all"
         >
           {lang === 'es' ? '¡A jugar!' : "Let's play!"}
         </button>
@@ -149,12 +149,12 @@ function PicoBottle() {
               style={{ transform: `translate(${x}px, ${y}px)` }}
             >
               <div
-                className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm border-2 ${selectedPlayer?.id === p.id ? 'ring-4 ring-[#D4A017] ring-offset-2 ring-offset-background' : ''}`}
+                className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm border-2 ${selectedPlayer?.id === p.id ? 'ring-4 ring-gold ring-offset-2 ring-offset-background' : ''}`}
                 style={{ backgroundColor: genderColors[p.gender], borderColor: genderColors[p.gender] }}
               >
                 {p.name.charAt(0).toUpperCase()}
               </div>
-              <span className={`text-xs mt-1 max-w-[60px] truncate ${selectedPlayer?.id === p.id ? 'text-[#D4A017] font-bold' : 'text-muted-foreground'}`}>
+              <span className={`text-xs mt-1 max-w-[60px] truncate ${selectedPlayer?.id === p.id ? 'text-gold font-bold' : 'text-muted-foreground'}`}>
                 {p.name}
               </span>
             </div>
@@ -162,11 +162,11 @@ function PicoBottle() {
         })}
 
         {/* Center circle */}
-        <div className="absolute w-24 h-24 rounded-full border-2 border-[#D4A017]/30 bg-card" />
+        <div className="absolute w-24 h-24 rounded-full border-2 border-gold/30 bg-card" />
 
         {/* Bottle */}
         <div
-          className="w-4 h-20 rounded-full bg-gradient-to-t from-[#D4A017] to-[#C96A1A] relative z-10"
+          className="w-4 h-20 rounded-full bg-gradient-to-t from-gold to-orange-bar relative z-10"
           style={{
             transform: `rotate(${angle}deg)`,
             transition: spinning ? 'transform 3s cubic-bezier(0.17,0.67,0.12,1)' : 'none',
@@ -178,7 +178,7 @@ function PicoBottle() {
         </div>
 
         {/* Center dot */}
-        <div className="absolute w-5 h-5 rounded-full bg-[#D4A017] z-20" style={{ marginTop: '40px' }} />
+        <div className="absolute w-5 h-5 rounded-full bg-gold z-20" style={{ marginTop: '40px' }} />
       </div>
 
       {/* Selected player announcement */}
@@ -195,13 +195,13 @@ function PicoBottle() {
         <button
           onClick={spin}
           disabled={spinning}
-          className="px-8 py-3 font-heading text-2xl tracking-wider bg-[#D4A017] text-black rounded hover:bg-[#C96A1A] disabled:opacity-50 transition-all min-h-[44px]"
+          className="px-8 py-3 font-heading text-2xl tracking-wider bg-gold text-black rounded hover:bg-orange-bar disabled:opacity-50 transition-all min-h-[44px]"
         >
           {spinning ? '...' : lang === 'es' ? 'Girar' : 'Spin'}
         </button>
         <button
           onClick={resetGame}
-          className="px-4 py-3 border border-border rounded hover:border-[#B83232] hover:text-[#B83232] transition-all"
+          className="px-4 py-3 border border-border rounded hover:border-red-bar hover:text-red-bar transition-all"
         >
           <RotateCcw size={18} />
         </button>
@@ -282,8 +282,8 @@ function NuncaNunca() {
   return (
     <div className="flex flex-col items-center gap-6 text-center max-w-md mx-auto">
       {current && (
-        <div className="border border-[#B83232]/40 rounded-lg p-6 bg-card">
-          <p className="font-heading text-2xl text-[#B83232] leading-tight">{current}</p>
+        <div className="border border-red-bar/40 rounded-lg p-6 bg-card">
+          <p className="font-heading text-2xl text-red-bar leading-tight">{current}</p>
         </div>
       )}
       <p className="text-xs text-muted-foreground">
@@ -291,7 +291,7 @@ function NuncaNunca() {
       </p>
       <button
         onClick={next}
-        className="px-8 py-3 font-heading text-2xl tracking-wider bg-[#B83232] text-white rounded hover:bg-[#C96A1A] transition-all min-h-[44px]"
+        className="px-8 py-3 font-heading text-2xl tracking-wider bg-red-bar text-white rounded hover:bg-orange-bar transition-all min-h-[44px]"
       >
         {lang === 'es' ? 'Siguiente' : 'Next'}
       </button>
@@ -353,8 +353,8 @@ function VerdadOTrago() {
   return (
     <div className="flex flex-col items-center gap-6 text-center max-w-md mx-auto">
       {current && (
-        <div className="border border-[#C96A1A]/40 rounded-lg p-6 bg-card">
-          <p className="font-heading text-2xl text-[#C96A1A] leading-tight">{current}</p>
+        <div className="border border-orange-bar/40 rounded-lg p-6 bg-card">
+          <p className="font-heading text-2xl text-orange-bar leading-tight">{current}</p>
         </div>
       )}
       <p className="text-xs text-muted-foreground">
@@ -362,7 +362,7 @@ function VerdadOTrago() {
       </p>
       <button
         onClick={next}
-        className="px-8 py-3 font-heading text-2xl tracking-wider bg-[#C96A1A] text-white rounded hover:bg-[#B83232] transition-all min-h-[44px]"
+        className="px-8 py-3 font-heading text-2xl tracking-wider bg-orange-bar text-white rounded hover:bg-red-bar transition-all min-h-[44px]"
       >
         {lang === 'es' ? 'Sacar pregunta' : 'Draw question'}
       </button>
@@ -426,7 +426,7 @@ function ReyDeLaMesa() {
   if (!hasKing) {
     return (
       <div className="flex flex-col items-center gap-4 text-center">
-        <Crown size={48} className="text-[#D4A017]" />
+        <Crown size={48} className="text-gold" />
         <p className="text-sm text-muted-foreground max-w-xs">
           {lang === 'es'
             ? 'Alguien debe ser el Rey de la Mesa. El Rey tiene el poder absoluto... por ahora.'
@@ -434,7 +434,7 @@ function ReyDeLaMesa() {
         </p>
         <button
           onClick={crownKing}
-          className="px-8 py-3 font-heading text-2xl tracking-wider bg-[#D4A017] text-black rounded hover:bg-[#C96A1A] transition-all min-h-[44px]"
+          className="px-8 py-3 font-heading text-2xl tracking-wider bg-gold text-black rounded hover:bg-orange-bar transition-all min-h-[44px]"
         >
           {lang === 'es' ? '¡Coronar al Rey!' : 'Crown the King!'}
         </button>
@@ -445,26 +445,26 @@ function ReyDeLaMesa() {
   return (
     <div className="flex flex-col items-center gap-6 text-center max-w-md mx-auto">
       <div className="flex items-center gap-2">
-        <Crown size={24} className="text-[#D4A017]" />
-        <span className="font-heading text-xl text-[#D4A017]">{lang === 'es' ? 'El Rey manda' : 'The King commands'}</span>
+        <Crown size={24} className="text-gold" />
+        <span className="font-heading text-xl text-gold">{lang === 'es' ? 'El Rey manda' : 'The King commands'}</span>
       </div>
 
       {current && (
-        <div className="border border-[#D4A017]/40 rounded-lg p-6 bg-card">
-          <p className="font-heading text-2xl text-[#D4A017] leading-tight">{current}</p>
+        <div className="border border-gold/40 rounded-lg p-6 bg-card">
+          <p className="font-heading text-2xl text-gold leading-tight">{current}</p>
         </div>
       )}
 
       <div className="flex gap-3">
         <button
           onClick={drawChallenge}
-          className="px-6 py-3 font-heading text-xl tracking-wider bg-[#D4A017] text-black rounded hover:bg-[#C96A1A] transition-all min-h-[44px]"
+          className="px-6 py-3 font-heading text-xl tracking-wider bg-gold text-black rounded hover:bg-orange-bar transition-all min-h-[44px]"
         >
           {lang === 'es' ? 'Sacar orden' : 'Draw order'}
         </button>
         <button
           onClick={abdicate}
-          className="px-4 py-3 border border-[#B83232]/50 text-[#B83232] rounded hover:bg-[#B83232] hover:text-white transition-all text-sm"
+          className="px-4 py-3 border border-red-bar/50 text-red-bar rounded hover:bg-red-bar hover:text-white transition-all text-sm"
         >
           {lang === 'es' ? 'Abdicar' : 'Abdicate'}
         </button>
@@ -503,7 +503,7 @@ function JuegoDeTapas() {
       {caps === null ? (
         <button
           onClick={newRound}
-          className="px-8 py-3 font-heading text-2xl tracking-wider bg-[#B83232] text-white rounded hover:bg-[#C96A1A] transition-all min-h-[44px]"
+          className="px-8 py-3 font-heading text-2xl tracking-wider bg-red-bar text-white rounded hover:bg-orange-bar transition-all min-h-[44px]"
         >
           {lang === 'es' ? 'Nuevo juego' : 'New game'}
         </button>
@@ -517,22 +517,22 @@ function JuegoDeTapas() {
               max="20"
               value={guess}
               onChange={(e) => setGuess(e.target.value)}
-              className="w-20 text-center text-2xl font-heading bg-card border border-border rounded p-2 focus:border-[#D4A017] outline-none text-foreground"
+              className="w-20 text-center text-2xl font-heading bg-card border border-border rounded p-2 focus:border-gold outline-none text-foreground"
               placeholder="?"
             />
             <button
               onClick={check}
-              className="px-6 py-2 font-heading text-xl bg-[#D4A017] text-black rounded hover:bg-[#C96A1A] transition-all min-h-[44px]"
+              className="px-6 py-2 font-heading text-xl bg-gold text-black rounded hover:bg-orange-bar transition-all min-h-[44px]"
             >
               OK
             </button>
           </div>
           {result && (
-            <div className={`text-center font-heading text-xl px-4 py-2 rounded ${result.startsWith('✓') ? 'text-green-400' : 'text-[#B83232]'}`}>
+            <div className={`text-center font-heading text-xl px-4 py-2 rounded ${result.startsWith('✓') ? 'text-green-400' : 'text-red-bar'}`}>
               {result}
             </div>
           )}
-          <button onClick={newRound} className="text-xs text-muted-foreground hover:text-[#D4A017] mt-2 transition-colors">
+          <button onClick={newRound} className="text-xs text-muted-foreground hover:text-gold mt-2 transition-colors">
             {lang === 'es' ? 'Nuevo juego' : 'New game'}
           </button>
         </>
@@ -594,13 +594,13 @@ function RetosGrupales() {
   return (
     <div className="flex flex-col items-center gap-4 text-center">
       {challenge && (
-        <div className="border border-[#C96A1A]/40 rounded p-4 bg-card max-w-xs">
-          <p className="font-heading text-2xl text-[#C96A1A] leading-tight">{challenge}</p>
+        <div className="border border-orange-bar/40 rounded p-4 bg-card max-w-xs">
+          <p className="font-heading text-2xl text-orange-bar leading-tight">{challenge}</p>
         </div>
       )}
       <button
         onClick={draw}
-        className="px-8 py-3 font-heading text-2xl tracking-wider bg-[#C96A1A] text-white rounded hover:bg-[#B83232] transition-all min-h-[44px]"
+        className="px-8 py-3 font-heading text-2xl tracking-wider bg-orange-bar text-white rounded hover:bg-red-bar transition-all min-h-[44px]"
       >
         {lang === 'es' ? 'Sacar reto' : 'Draw challenge'}
       </button>
@@ -639,7 +639,7 @@ export default function GamesSection() {
     <section id="juegos" className="py-24 bg-background">
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         <div className="mb-12">
-          <h2 className="font-heading text-6xl sm:text-8xl text-[#D4A017] neon-gold mb-3">
+          <h2 className="font-heading text-6xl sm:text-8xl text-gold neon-gold mb-3">
             {lang === 'es' ? 'Juegos de Bar' : 'Bar Games'}
           </h2>
           <p className="text-muted-foreground text-sm sm:text-base">
@@ -655,8 +655,8 @@ export default function GamesSection() {
               onClick={() => setActive(tab.id)}
               className={`flex items-center gap-2 px-4 py-2 font-heading text-lg tracking-wider rounded border transition-all min-h-[44px] ${
                 active === tab.id
-                  ? 'bg-[#D4A017] text-black border-[#D4A017]'
-                  : 'border-border hover:border-[#D4A017] hover:text-[#D4A017]'
+                  ? 'bg-gold text-black border-gold'
+                  : 'border-border hover:border-gold hover:text-gold'
               }`}
             >
               {tab.icon}

@@ -19,7 +19,7 @@ export default function DashboardPage() {
       label: 'Productos en menú',
       value: availableItems,
       sub: `de ${menu.items.length} totales`,
-      color: '#D4A017',
+      color: 'var(--gold)',
     },
     {
       href: '/admin/inventory',
@@ -27,7 +27,7 @@ export default function DashboardPage() {
       label: 'Inventario',
       value: inventory.items.length,
       sub: lowStock.length > 0 ? `${lowStock.length} con stock bajo` : 'Todo en orden',
-      color: lowStock.length > 0 ? '#B83232' : '#D4A017',
+      color: lowStock.length > 0 ? 'var(--red-bar)' : 'var(--gold)',
       alert: lowStock.length > 0,
     },
     {
@@ -36,7 +36,7 @@ export default function DashboardPage() {
       label: 'Promociones activas',
       value: activePromos,
       sub: `de ${promotions.items.length} totales`,
-      color: '#C96A1A',
+      color: 'var(--orange-bar)',
     },
     {
       href: '/admin/settings',
@@ -44,27 +44,27 @@ export default function DashboardPage() {
       label: 'Configuración',
       value: settings.whatsapp ? '✓' : '!',
       sub: settings.whatsapp ? 'WhatsApp configurado' : 'Configura el WhatsApp',
-      color: settings.whatsapp ? '#D4A017' : '#B83232',
+      color: settings.whatsapp ? 'var(--gold)' : 'var(--red-bar)',
     },
   ]
 
   return (
     <div>
       <div className="mb-8">
-        <h1 className="font-heading text-5xl text-[#D4A017] tracking-wider">Panel de Control</h1>
+        <h1 className="font-heading text-5xl text-gold tracking-wider">Panel de Control</h1>
         <p className="text-muted-foreground text-sm mt-1">Gestiona tu bar desde aquí.</p>
       </div>
 
       {/* Alert: low stock */}
       {lowStock.length > 0 && (
-        <div className="mb-6 p-4 border border-[#B83232]/40 rounded bg-[#B83232]/10 flex items-start gap-3">
-          <AlertTriangle size={18} className="text-[#B83232] shrink-0 mt-0.5" />
+        <div className="mb-6 p-4 border border-red-bar/40 rounded bg-red-bar/10 flex items-start gap-3">
+          <AlertTriangle size={18} className="text-red-bar shrink-0 mt-0.5" />
           <div>
-            <p className="text-sm font-semibold text-[#B83232]">Stock bajo en {lowStock.length} producto{lowStock.length > 1 ? 's' : ''}</p>
+            <p className="text-sm font-semibold text-red-bar">Stock bajo en {lowStock.length} producto{lowStock.length > 1 ? 's' : ''}</p>
             <p className="text-xs text-muted-foreground mt-1">
               {lowStock.map((i) => i.name).join(', ')}
             </p>
-            <Link href="/admin/inventory" className="text-xs text-[#D4A017] hover:underline mt-1 inline-block">
+            <Link href="/admin/inventory" className="text-xs text-gold hover:underline mt-1 inline-block">
               Ver inventario →
             </Link>
           </div>
@@ -77,11 +77,11 @@ export default function DashboardPage() {
           <Link
             key={card.href}
             href={card.href}
-            className="border border-border hover:border-[#D4A017]/50 rounded bg-card p-5 transition-all group"
+            className="border border-border hover:border-gold/50 rounded bg-card p-5 transition-all group"
           >
             <div className="flex items-start justify-between mb-3">
               <card.icon size={18} className="text-muted-foreground" />
-              {card.alert && <AlertTriangle size={14} className="text-[#B83232]" />}
+              {card.alert && <AlertTriangle size={14} className="text-red-bar" />}
             </div>
             <p className="font-heading text-4xl" style={{ color: card.color }}>{card.value}</p>
             <p className="text-xs font-semibold text-foreground mt-1">{card.label}</p>
@@ -104,9 +104,9 @@ export default function DashboardPage() {
             key={item.href}
             href={item.href}
             target={item.href === '/' ? '_blank' : undefined}
-            className="flex items-center gap-4 p-4 border border-border hover:border-[#D4A017]/50 rounded bg-card transition-all"
+            className="flex items-center gap-4 p-4 border border-border hover:border-gold/50 rounded bg-card transition-all"
           >
-            <item.icon size={18} className="text-[#D4A017] shrink-0" />
+            <item.icon size={18} className="text-gold shrink-0" />
             <div>
               <p className="text-sm font-semibold">{item.label}</p>
               <p className="text-xs text-muted-foreground">{item.desc}</p>

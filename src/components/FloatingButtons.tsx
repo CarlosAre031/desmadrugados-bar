@@ -41,7 +41,7 @@ export default function FloatingButtons({ whatsapp }: Props) {
       {mounted && (
         <button
           onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-          className={`${btnBase} bg-background/90 border-border hover:border-[#D4A017] hover:text-[#D4A017]`}
+          className={`${btnBase} bg-background/90 border-border hover:border-gold hover:text-gold`}
           aria-label="Cambiar tema"
           title="Cambiar tema"
         >
@@ -52,7 +52,7 @@ export default function FloatingButtons({ whatsapp }: Props) {
       {/* Language */}
       <button
         onClick={() => setLang(lang === 'es' ? 'en' : 'es')}
-        className={`${btnBase} bg-background/90 border-border hover:border-[#D4A017] hover:text-[#D4A017] font-mono text-xs font-bold`}
+        className={`${btnBase} bg-background/90 border-border hover:border-gold hover:text-gold font-mono text-xs font-bold`}
         aria-label="Cambiar idioma"
         title="Cambiar idioma"
       >

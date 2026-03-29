@@ -55,7 +55,7 @@ export default function Navbar() {
             <li key={l.href}>
               <a
                 href={l.href}
-                className="font-heading text-lg tracking-wider text-foreground/80 hover:text-[#D4A017] transition-colors duration-200"
+                className="font-heading text-lg tracking-wider text-foreground/80 hover:text-gold transition-colors duration-200"
               >
                 {l.label}
               </a>
@@ -67,7 +67,7 @@ export default function Navbar() {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setLang(lang === 'es' ? 'en' : 'es')}
-            className="px-2 py-1 text-xs font-mono font-semibold border border-border rounded hover:border-[#D4A017] hover:text-[#D4A017] transition-colors min-h-[36px] min-w-[36px]"
+            className="px-2 py-1 text-xs font-mono font-semibold border border-border rounded hover:border-gold hover:text-gold transition-colors min-h-[36px] min-w-[36px]"
             aria-label="Cambiar idioma"
           >
             {lang === 'es' ? 'EN' : 'ES'}
@@ -75,14 +75,14 @@ export default function Navbar() {
           {mounted && (
             <button
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className="p-2 border border-border rounded hover:border-[#D4A017] hover:text-[#D4A017] transition-colors min-h-[36px] min-w-[36px] flex items-center justify-center"
+              className="p-2 border border-border rounded hover:border-gold hover:text-gold transition-colors min-h-[36px] min-w-[36px] flex items-center justify-center"
               aria-label="Cambiar tema"
             >
               {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
             </button>
           )}
           <button
-            className="md:hidden p-2 border border-border rounded hover:border-[#D4A017] hover:text-[#D4A017] transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+            className="md:hidden p-2 border border-border rounded hover:border-gold hover:text-gold transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
             onClick={() => setOpen(!open)}
             aria-label="Menú de navegación"
             aria-expanded={open}
@@ -100,7 +100,7 @@ export default function Navbar() {
               <li key={l.href}>
                 <a
                   href={l.href}
-                  className="font-heading text-2xl tracking-wider text-foreground/80 hover:text-[#D4A017] transition-colors block"
+                  className="font-heading text-2xl tracking-wider text-foreground/80 hover:text-gold transition-colors block"
                   onClick={() => setOpen(false)}
                 >
                   {l.label}
@@ -111,7 +111,7 @@ export default function Navbar() {
           <div className="px-4 pb-4 flex items-center gap-2 border-t border-border/30 pt-3">
             <button
               onClick={() => setLang(lang === 'es' ? 'en' : 'es')}
-              className="px-3 py-1.5 text-xs font-mono font-semibold border border-border rounded hover:border-[#D4A017] hover:text-[#D4A017] transition-colors"
+              className="px-3 py-1.5 text-xs font-mono font-semibold border border-border rounded hover:border-gold hover:text-gold transition-colors"
               aria-label="Cambiar idioma"
             >
               {lang === 'es' ? 'EN' : 'ES'}
@@ -119,7 +119,7 @@ export default function Navbar() {
             {mounted && (
               <button
                 onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                className="p-2 border border-border rounded hover:border-[#D4A017] hover:text-[#D4A017] transition-colors flex items-center justify-center"
+                className="p-2 border border-border rounded hover:border-gold hover:text-gold transition-colors flex items-center justify-center"
                 aria-label="Cambiar tema"
               >
                 {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}

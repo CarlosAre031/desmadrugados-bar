@@ -39,7 +39,7 @@ function ItemRow({ item, categories, onSave, onDelete }: {
       <tr className="border-b border-border bg-secondary/20">
         <td className="px-3 py-2">
           <input
-            className="w-full bg-card border border-[#D4A017] rounded px-2 py-1 text-sm focus:outline-none"
+            className="w-full bg-card border border-gold rounded px-2 py-1 text-sm focus:outline-none"
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
             placeholder="Nombre ES"
@@ -47,7 +47,7 @@ function ItemRow({ item, categories, onSave, onDelete }: {
         </td>
         <td className="px-3 py-2 hidden sm:table-cell">
           <input
-            className="w-full bg-card border border-border rounded px-2 py-1 text-sm focus:outline-none focus:border-[#D4A017]"
+            className="w-full bg-card border border-border rounded px-2 py-1 text-sm focus:outline-none focus:border-gold"
             value={form.nameEn}
             onChange={(e) => setForm({ ...form, nameEn: e.target.value })}
             placeholder="Name EN"
@@ -55,7 +55,7 @@ function ItemRow({ item, categories, onSave, onDelete }: {
         </td>
         <td className="px-3 py-2">
           <select
-            className="w-full bg-card border border-border rounded px-2 py-1 text-sm focus:outline-none focus:border-[#D4A017]"
+            className="w-full bg-card border border-border rounded px-2 py-1 text-sm focus:outline-none focus:border-gold"
             value={form.category}
             onChange={(e) => setForm({ ...form, category: e.target.value })}
           >
@@ -67,7 +67,7 @@ function ItemRow({ item, categories, onSave, onDelete }: {
         <td className="px-3 py-2">
           <input
             type="number"
-            className="w-20 bg-card border border-border rounded px-2 py-1 text-sm focus:outline-none focus:border-[#D4A017]"
+            className="w-20 bg-card border border-border rounded px-2 py-1 text-sm focus:outline-none focus:border-gold"
             value={form.price}
             onChange={(e) => setForm({ ...form, price: Number(e.target.value) })}
           />
@@ -77,15 +77,15 @@ function ItemRow({ item, categories, onSave, onDelete }: {
             type="checkbox"
             checked={form.available}
             onChange={(e) => setForm({ ...form, available: e.target.checked })}
-            className="accent-[#D4A017] w-4 h-4"
+            className="accent-gold w-4 h-4"
           />
         </td>
         <td className="px-3 py-2">
           <div className="flex gap-2">
-            <button onClick={save} className="p-1.5 bg-[#D4A017] text-black rounded hover:bg-[#C96A1A] transition-colors">
+            <button onClick={save} className="p-1.5 bg-gold text-black rounded hover:bg-orange-bar transition-colors">
               <Check size={14} />
             </button>
-            <button onClick={() => setEditing(false)} className="p-1.5 border border-border rounded hover:border-[#B83232] hover:text-[#B83232] transition-colors">
+            <button onClick={() => setEditing(false)} className="p-1.5 border border-border rounded hover:border-red-bar hover:text-red-bar transition-colors">
               <X size={14} />
             </button>
           </div>
@@ -99,7 +99,7 @@ function ItemRow({ item, categories, onSave, onDelete }: {
       <td className="px-3 py-3 text-sm font-medium">{item.name}</td>
       <td className="px-3 py-3 text-sm text-muted-foreground hidden sm:table-cell">{item.nameEn}</td>
       <td className="px-3 py-3 text-sm">{cat?.icon} {cat?.name}</td>
-      <td className="px-3 py-3 text-sm font-heading text-lg text-[#D4A017]">${item.price}</td>
+      <td className="px-3 py-3 text-sm font-heading text-lg text-gold">${item.price}</td>
       <td className="px-3 py-3">
         <Badge className={item.available ? 'bg-green-700/20 text-green-400 border-green-700/30' : 'bg-secondary text-muted-foreground'}>
           {item.available ? 'Activo' : 'Inactivo'}
@@ -107,10 +107,10 @@ function ItemRow({ item, categories, onSave, onDelete }: {
       </td>
       <td className="px-3 py-3">
         <div className="flex gap-2">
-          <button onClick={() => { setForm(item); setEditing(true) }} className="p-1.5 border border-border rounded hover:border-[#D4A017] hover:text-[#D4A017] transition-colors">
+          <button onClick={() => { setForm(item); setEditing(true) }} className="p-1.5 border border-border rounded hover:border-gold hover:text-gold transition-colors">
             <Pencil size={14} />
           </button>
-          <button onClick={() => onDelete(item.id)} className="p-1.5 border border-border rounded hover:border-[#B83232] hover:text-[#B83232] transition-colors">
+          <button onClick={() => onDelete(item.id)} className="p-1.5 border border-border rounded hover:border-red-bar hover:text-red-bar transition-colors">
             <Trash2 size={14} />
           </button>
         </div>
@@ -175,7 +175,7 @@ export default function MenuAdminPage() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="font-heading text-4xl text-[#D4A017] tracking-wider">Menú</h1>
+          <h1 className="font-heading text-4xl text-gold tracking-wider">Menú</h1>
           <p className="text-muted-foreground text-sm">{data.items.length} productos</p>
         </div>
         <div className="flex items-center gap-3">
@@ -183,7 +183,7 @@ export default function MenuAdminPage() {
           {saving && <span className="text-xs text-muted-foreground">Guardando...</span>}
           <button
             onClick={() => setNewItem(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-[#D4A017] text-black font-semibold text-sm rounded hover:bg-[#C96A1A] transition-all min-h-[40px]"
+            className="flex items-center gap-2 px-4 py-2 bg-gold text-black font-semibold text-sm rounded hover:bg-orange-bar transition-all min-h-[40px]"
           >
             <Plus size={16} /> Agregar
           </button>
@@ -204,7 +204,7 @@ export default function MenuAdminPage() {
       <div className="flex flex-wrap gap-2 mb-4">
         <button
           onClick={() => setFilter('all')}
-          className={`px-3 py-1 text-xs rounded border transition-all ${filter === 'all' ? 'bg-[#D4A017] text-black border-[#D4A017]' : 'border-border hover:border-[#D4A017]'}`}
+          className={`px-3 py-1 text-xs rounded border transition-all ${filter === 'all' ? 'bg-gold text-black border-gold' : 'border-border hover:border-gold'}`}
         >
           Todos
         </button>
@@ -212,7 +212,7 @@ export default function MenuAdminPage() {
           <button
             key={c.id}
             onClick={() => setFilter(c.id)}
-            className={`px-3 py-1 text-xs rounded border transition-all ${filter === c.id ? 'bg-[#D4A017] text-black border-[#D4A017]' : 'border-border hover:border-[#D4A017]'}`}
+            className={`px-3 py-1 text-xs rounded border transition-all ${filter === c.id ? 'bg-gold text-black border-gold' : 'border-border hover:border-gold'}`}
           >
             {c.icon} {c.name}
           </button>
@@ -221,23 +221,23 @@ export default function MenuAdminPage() {
 
       {/* Add new form */}
       {newItem && (
-        <div className="mb-4 p-4 border border-[#D4A017]/40 rounded bg-card">
+        <div className="mb-4 p-4 border border-gold/40 rounded bg-card">
           <p className="text-sm font-semibold mb-3">Nuevo producto</p>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
             <input
-              className="bg-background border border-border rounded px-3 py-2 text-sm focus:border-[#D4A017] outline-none"
+              className="bg-background border border-border rounded px-3 py-2 text-sm focus:border-gold outline-none"
               placeholder="Nombre ES *"
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
             />
             <input
-              className="bg-background border border-border rounded px-3 py-2 text-sm focus:border-[#D4A017] outline-none"
+              className="bg-background border border-border rounded px-3 py-2 text-sm focus:border-gold outline-none"
               placeholder="Name EN"
               value={form.nameEn}
               onChange={(e) => setForm({ ...form, nameEn: e.target.value })}
             />
             <select
-              className="bg-background border border-border rounded px-3 py-2 text-sm focus:border-[#D4A017] outline-none"
+              className="bg-background border border-border rounded px-3 py-2 text-sm focus:border-gold outline-none"
               value={form.category}
               onChange={(e) => setForm({ ...form, category: e.target.value })}
             >
@@ -248,7 +248,7 @@ export default function MenuAdminPage() {
             </select>
             <input
               type="number"
-              className="bg-background border border-border rounded px-3 py-2 text-sm focus:border-[#D4A017] outline-none"
+              className="bg-background border border-border rounded px-3 py-2 text-sm focus:border-gold outline-none"
               placeholder="Precio"
               value={form.price || ''}
               onChange={(e) => setForm({ ...form, price: Number(e.target.value) })}
@@ -256,13 +256,13 @@ export default function MenuAdminPage() {
             <div className="flex gap-2">
               <button
                 onClick={addItem}
-                className="flex-1 py-2 bg-[#D4A017] text-black font-semibold text-sm rounded hover:bg-[#C96A1A] transition-all"
+                className="flex-1 py-2 bg-gold text-black font-semibold text-sm rounded hover:bg-orange-bar transition-all"
               >
                 Guardar
               </button>
               <button
                 onClick={() => setNewItem(false)}
-                className="px-3 py-2 border border-border rounded hover:border-[#B83232] hover:text-[#B83232] transition-all"
+                className="px-3 py-2 border border-border rounded hover:border-red-bar hover:text-red-bar transition-all"
               >
                 <X size={16} />
               </button>

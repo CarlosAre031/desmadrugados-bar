@@ -194,7 +194,7 @@ export default function BarPhrases() {
           {lang === 'es' ? 'Sabiduría de cantina' : 'Bar wisdom'}
         </p>
         <blockquote
-          className={`font-heading text-2xl sm:text-3xl md:text-4xl text-[#D4A017] leading-tight min-h-[80px] flex items-center justify-center transition-opacity duration-200 ${
+          className={`font-heading text-2xl sm:text-3xl md:text-4xl text-gold leading-tight min-h-[80px] flex items-center justify-center transition-opacity duration-200 ${
             fadeIn ? 'opacity-100' : 'opacity-0'
           }`}
         >
@@ -202,7 +202,7 @@ export default function BarPhrases() {
         </blockquote>
         <button
           onClick={getRandomPhrase}
-          className="mt-6 inline-flex items-center gap-2 px-4 py-2 text-xs text-muted-foreground border border-border rounded hover:border-[#D4A017] hover:text-[#D4A017] transition-colors"
+          className="mt-6 inline-flex items-center gap-2 px-4 py-2 text-xs text-muted-foreground border border-border rounded hover:border-gold hover:text-gold transition-colors"
         >
           <RefreshCw size={12} />
           {lang === 'es' ? 'Otra frase' : 'Another phrase'}

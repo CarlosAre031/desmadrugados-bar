@@ -28,7 +28,7 @@ export default function LocationSection({ address, addressEn, whatsapp, mapEmbed
           {/* Info */}
           <div className="flex flex-col gap-8">
             <div className="flex gap-4">
-              <MapPin size={24} className="text-[#D4A017] shrink-0 mt-1" />
+              <MapPin size={24} className="text-gold shrink-0 mt-1" />
               <div>
                 <p className="font-heading text-2xl text-foreground mb-1">{t.location.address}</p>
                 <p className="text-muted-foreground text-sm leading-relaxed">
@@ -65,7 +65,7 @@ export default function LocationSection({ address, addressEn, whatsapp, mapEmbed
               />
             ) : (
               <div className="text-center px-6">
-                <MapPin size={40} className="text-[#D4A017]/40 mx-auto mb-3" />
+                <MapPin size={40} className="text-gold/40 mx-auto mb-3" />
                 <p className="text-muted-foreground text-sm">
                   {lang === 'es'
                     ? 'Agrega el enlace de Google Maps desde el panel admin.'

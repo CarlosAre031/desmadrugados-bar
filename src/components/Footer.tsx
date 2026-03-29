@@ -46,7 +46,7 @@ export default function Footer({ instagram, facebook }: Props) {
                 height={52}
                 className="object-contain h-12 w-12"
               />
-              <span className="font-heading text-2xl text-[#D4A017] tracking-widest">
+              <span className="font-heading text-2xl text-gold tracking-widest">
                 DESMADRUGADOS
               </span>
             </div>
@@ -60,7 +60,7 @@ export default function Footer({ instagram, facebook }: Props) {
                 href={instagram.startsWith('http') ? instagram : `https://instagram.com/${instagram}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 border border-border rounded hover:border-[#D4A017] hover:text-[#D4A017] transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+                className="p-2 border border-border rounded hover:border-gold hover:text-gold transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                 aria-label="Instagram"
               >
                 <IconInstagram />
@@ -71,7 +71,7 @@ export default function Footer({ instagram, facebook }: Props) {
                 href={facebook.startsWith('http') ? facebook : `https://facebook.com/${facebook}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 border border-border rounded hover:border-[#D4A017] hover:text-[#D4A017] transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+                className="p-2 border border-border rounded hover:border-gold hover:text-gold transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                 aria-label="Facebook"
               >
                 <IconFacebook />

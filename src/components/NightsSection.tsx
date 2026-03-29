@@ -28,7 +28,7 @@ export default function NightsSection({ hours, specialNights }: Props) {
     <section className="py-24 brick-bg">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="mb-12">
-          <h2 className="font-heading text-6xl sm:text-8xl text-[#C96A1A] mb-3">
+          <h2 className="font-heading text-6xl sm:text-8xl text-orange-bar mb-3">
             {t.nights.title}
           </h2>
           <p className="text-muted-foreground text-sm sm:text-base">
@@ -40,7 +40,7 @@ export default function NightsSection({ hours, specialNights }: Props) {
           {/* Hours */}
           <div>
             <div className="flex items-center gap-2 mb-6">
-              <Clock size={18} className="text-[#D4A017]" />
+              <Clock size={18} className="text-gold" />
               <h3 className="font-heading text-3xl text-foreground tracking-wider">
                 {t.nights.hoursTitle}
               </h3>
@@ -54,7 +54,7 @@ export default function NightsSection({ hours, specialNights }: Props) {
                   <span className="text-sm font-semibold text-foreground/80">
                     {lang === 'es' ? h.day : h.dayEn}
                   </span>
-                  <span className="font-heading text-xl text-[#D4A017]">{h.time}</span>
+                  <span className="font-heading text-xl text-gold">{h.time}</span>
                 </div>
               ))}
             </div>
@@ -63,15 +63,15 @@ export default function NightsSection({ hours, specialNights }: Props) {
           {/* Special nights */}
           <div>
             <div className="flex items-center gap-2 mb-6">
-              <Star size={18} className="text-[#B83232]" />
+              <Star size={18} className="text-red-bar" />
               <h3 className="font-heading text-3xl text-foreground tracking-wider">
                 {t.nights.specialsTitle}
               </h3>
             </div>
             <div className="flex flex-col gap-4">
               {specialNights.map((night, i) => (
-                <div key={i} className="border border-border/40 hover:border-[#C96A1A]/50 rounded p-4 transition-all bg-card">
-                  <p className="font-heading text-2xl text-[#C96A1A] mb-1">
+                <div key={i} className="border border-border/40 hover:border-orange-bar/50 rounded p-4 transition-all bg-card">
+                  <p className="font-heading text-2xl text-orange-bar mb-1">
                     {lang === 'es' ? night.name : night.nameEn}
                   </p>
                   <p className="text-sm text-muted-foreground">

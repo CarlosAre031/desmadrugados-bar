@@ -62,14 +62,14 @@ export default function HeroCarousel({ images }: Props) {
         <>
           <button
             onClick={prev}
-            className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 border border-[#D4A017]/30 hover:border-[#D4A017] text-white p-2 rounded transition-all min-h-[44px] min-w-[44px] flex items-center justify-center"
+            className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 border border-gold/30 hover:border-gold text-white p-2 rounded transition-all min-h-[44px] min-w-[44px] flex items-center justify-center"
             aria-label="Imagen anterior"
           >
             <ChevronLeft size={20} />
           </button>
           <button
             onClick={next}
-            className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 border border-[#D4A017]/30 hover:border-[#D4A017] text-white p-2 rounded transition-all min-h-[44px] min-w-[44px] flex items-center justify-center"
+            className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 border border-gold/30 hover:border-gold text-white p-2 rounded transition-all min-h-[44px] min-w-[44px] flex items-center justify-center"
             aria-label="Siguiente imagen"
           >
             <ChevronRight size={20} />
@@ -82,7 +82,7 @@ export default function HeroCarousel({ images }: Props) {
                 key={i}
                 onClick={() => setCurrent(i)}
                 className={`w-2 h-2 rounded-full transition-all ${
-                  i === current ? 'bg-[#D4A017] w-6' : 'bg-white/40'
+                  i === current ? 'bg-gold w-6' : 'bg-white/40'
                 }`}
                 aria-label={`Ir a imagen ${i + 1}`}
               />

@@ -32,7 +32,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0D0D0D] flex items-center justify-center px-4">
+    <div className="min-h-screen bg-background flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
         {/* Logo */}
         <div className="flex flex-col items-center gap-4 mb-10">
@@ -61,7 +61,7 @@ export default function LoginPage() {
                 type={show ? 'text' : 'password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-card border border-border rounded px-10 py-3 text-sm focus:border-[#D4A017] outline-none transition-colors"
+                className="w-full bg-card border border-border rounded px-10 py-3 text-sm focus:border-gold outline-none transition-colors"
                 placeholder="••••••••••••"
                 required
               />
@@ -77,20 +77,20 @@ export default function LoginPage() {
           </div>
 
           {error && (
-            <p className="text-[#B83232] text-sm text-center">{error}</p>
+            <p className="text-red-bar text-sm text-center">{error}</p>
           )}
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 font-heading text-xl tracking-wider bg-[#D4A017] text-black rounded hover:bg-[#C96A1A] disabled:opacity-50 transition-all min-h-[48px]"
+            className="w-full py-3 font-heading text-xl tracking-wider bg-gold text-black rounded hover:bg-orange-bar disabled:opacity-50 transition-all min-h-[48px]"
           >
             {loading ? 'Verificando...' : 'Entrar'}
           </button>
         </form>
 
         <p className="text-center text-xs text-muted-foreground mt-8">
-          <a href="/" className="hover:text-[#D4A017] transition-colors">
+          <a href="/" className="hover:text-gold transition-colors">
             ← Volver al sitio
           </a>
         </p>

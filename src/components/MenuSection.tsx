@@ -36,7 +36,7 @@ export default function MenuSection({ categories, items }: Props) {
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         {/* Header */}
         <div className="mb-12">
-          <h2 className="font-heading text-6xl sm:text-8xl text-[#D4A017] neon-gold mb-3">
+          <h2 className="font-heading text-6xl sm:text-8xl text-gold neon-gold mb-3">
             {t.menu.title}
           </h2>
           <p className="text-muted-foreground text-sm sm:text-base max-w-lg">
@@ -50,8 +50,8 @@ export default function MenuSection({ categories, items }: Props) {
             onClick={() => setActive('all')}
             className={`px-4 py-2 font-heading text-lg tracking-wider rounded border transition-all min-h-[44px] ${
               active === 'all'
-                ? 'bg-[#D4A017] text-black border-[#D4A017]'
-                : 'border-border hover:border-[#D4A017] hover:text-[#D4A017]'
+                ? 'bg-gold text-black border-gold'
+                : 'border-border hover:border-gold hover:text-gold'
             }`}
           >
             {t.menu.all}
@@ -62,8 +62,8 @@ export default function MenuSection({ categories, items }: Props) {
               onClick={() => setActive(cat.id)}
               className={`px-4 py-2 font-heading text-lg tracking-wider rounded border transition-all min-h-[44px] flex items-center gap-1 ${
                 active === cat.id
-                  ? 'bg-[#D4A017] text-black border-[#D4A017]'
-                  : 'border-border hover:border-[#D4A017] hover:text-[#D4A017]'
+                  ? 'bg-gold text-black border-gold'
+                  : 'border-border hover:border-gold hover:text-gold'
               }`}
             >
               <span>{cat.icon}</span>
@@ -79,7 +79,7 @@ export default function MenuSection({ categories, items }: Props) {
               key={item.id}
               className={`flex items-center justify-between p-4 border rounded transition-all ${
                 item.available
-                  ? 'border-border hover:border-[#D4A017]/50 bg-card'
+                  ? 'border-border hover:border-gold/50 bg-card'
                   : 'border-border/30 bg-card/40 opacity-50'
               }`}
             >
@@ -93,7 +93,7 @@ export default function MenuSection({ categories, items }: Props) {
                   </Badge>
                 )}
               </div>
-              <span className="font-heading text-2xl text-[#D4A017] shrink-0 ml-4">
+              <span className="font-heading text-2xl text-gold shrink-0 ml-4">
                 ${item.price}
               </span>
             </div>

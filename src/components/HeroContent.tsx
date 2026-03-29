@@ -15,7 +15,7 @@ export default function HeroContent({ whatsapp }: Props) {
     <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
       {/* Tagline */}
       <h1
-        className="font-heading text-7xl sm:text-9xl lg:text-[10rem] text-[#D4A017] leading-none mb-4"
+        className="font-heading text-7xl sm:text-9xl lg:text-[10rem] text-gold leading-none mb-4"
         style={{ textShadow: '0 0 40px rgba(212,160,23,0.5), 0 0 80px rgba(212,160,23,0.2)' }}
       >
         {t.hero.tagline}
@@ -30,7 +30,7 @@ export default function HeroContent({ whatsapp }: Props) {
       <div className="flex flex-col sm:flex-row gap-4 justify-center">
         <a
           href="#menu"
-          className="px-8 py-4 font-heading text-2xl tracking-wider bg-[#D4A017] text-black rounded hover:bg-[#C96A1A] transition-all min-h-[56px] flex items-center justify-center"
+          className="px-8 py-4 font-heading text-2xl tracking-wider bg-gold text-black rounded hover:bg-orange-bar transition-all min-h-[56px] flex items-center justify-center"
         >
           {t.hero.cta}
         </a>
@@ -39,7 +39,7 @@ export default function HeroContent({ whatsapp }: Props) {
             href={waUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="px-8 py-4 font-heading text-2xl tracking-wider border border-white/60 text-white rounded hover:border-[#D4A017] hover:text-[#D4A017] hover:bg-black/20 transition-all min-h-[56px] flex items-center justify-center gap-2"
+            className="px-8 py-4 font-heading text-2xl tracking-wider border border-white/60 text-white rounded hover:border-gold hover:text-gold hover:bg-black/20 transition-all min-h-[56px] flex items-center justify-center gap-2"
           >
             <MessageCircle size={20} />
             {t.hero.ctaSub}

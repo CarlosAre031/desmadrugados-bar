@@ -108,7 +108,7 @@ export default function CarouselAdminPage() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="font-heading text-4xl text-[#D4A017] tracking-wider">Carrusel de Fotos</h1>
+          <h1 className="font-heading text-4xl text-gold tracking-wider">Carrusel de Fotos</h1>
           <p className="text-muted-foreground text-sm">{data.images.length} imagen{data.images.length !== 1 ? 'es' : ''} — arrastra para reordenar</p>
         </div>
         {saved && <span className="text-xs text-green-400">✓ Guardado</span>}
@@ -130,7 +130,7 @@ export default function CarouselAdminPage() {
           />
           <label
             htmlFor="file-upload"
-            className={`flex items-center justify-center gap-2 w-full py-3 border border-dashed border-border rounded cursor-pointer hover:border-[#D4A017] hover:text-[#D4A017] transition-all text-sm text-muted-foreground ${uploading ? 'opacity-50 pointer-events-none' : ''}`}
+            className={`flex items-center justify-center gap-2 w-full py-3 border border-dashed border-border rounded cursor-pointer hover:border-gold hover:text-gold transition-all text-sm text-muted-foreground ${uploading ? 'opacity-50 pointer-events-none' : ''}`}
           >
             {uploading ? 'Subiendo...' : (
               <><Plus size={16} /> Seleccionar imagen (JPG, PNG, WebP · máx 5MB)</>
@@ -143,20 +143,20 @@ export default function CarouselAdminPage() {
           <p className="text-sm font-semibold mb-3 flex items-center gap-2"><Plus size={14} /> Agregar por URL</p>
           <div className="flex flex-col gap-2">
             <input
-              className="w-full bg-background border border-border rounded px-3 py-2 text-sm outline-none focus:border-[#D4A017]"
+              className="w-full bg-background border border-border rounded px-3 py-2 text-sm outline-none focus:border-gold"
               placeholder="https://... (URL de la imagen)"
               value={urlInput}
               onChange={(e) => setUrlInput(e.target.value)}
             />
             <div className="flex gap-2">
               <input
-                className="flex-1 bg-background border border-border rounded px-3 py-2 text-sm outline-none focus:border-[#D4A017]"
+                className="flex-1 bg-background border border-border rounded px-3 py-2 text-sm outline-none focus:border-gold"
                 placeholder="Descripción ES"
                 value={altInput}
                 onChange={(e) => setAltInput(e.target.value)}
               />
               <input
-                className="flex-1 bg-background border border-border rounded px-3 py-2 text-sm outline-none focus:border-[#D4A017]"
+                className="flex-1 bg-background border border-border rounded px-3 py-2 text-sm outline-none focus:border-gold"
                 placeholder="Description EN"
                 value={altEnInput}
                 onChange={(e) => setAltEnInput(e.target.value)}
@@ -165,7 +165,7 @@ export default function CarouselAdminPage() {
             <button
               onClick={addByUrl}
               disabled={!urlInput}
-              className="py-2 bg-[#D4A017] text-black font-semibold text-sm rounded hover:bg-[#C96A1A] transition-all disabled:opacity-50"
+              className="py-2 bg-gold text-black font-semibold text-sm rounded hover:bg-orange-bar transition-all disabled:opacity-50"
             >
               Agregar
             </button>
@@ -192,13 +192,13 @@ export default function CarouselAdminPage() {
                   unoptimized
                 />
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
-                  <button onClick={() => moveUp(i)} disabled={i === 0} className="p-2 bg-black/60 rounded hover:bg-[#D4A017] hover:text-black transition-all disabled:opacity-30">
+                  <button onClick={() => moveUp(i)} disabled={i === 0} className="p-2 bg-black/60 rounded hover:bg-gold hover:text-black transition-all disabled:opacity-30">
                     <ArrowUp size={16} />
                   </button>
-                  <button onClick={() => moveDown(i)} disabled={i === data.images.length - 1} className="p-2 bg-black/60 rounded hover:bg-[#D4A017] hover:text-black transition-all disabled:opacity-30">
+                  <button onClick={() => moveDown(i)} disabled={i === data.images.length - 1} className="p-2 bg-black/60 rounded hover:bg-gold hover:text-black transition-all disabled:opacity-30">
                     <ArrowDown size={16} />
                   </button>
-                  <button onClick={() => deleteImage(img.id)} className="p-2 bg-black/60 rounded hover:bg-[#B83232] hover:text-white transition-all">
+                  <button onClick={() => deleteImage(img.id)} className="p-2 bg-black/60 rounded hover:bg-red-bar hover:text-white transition-all">
                     <Trash2 size={16} />
                   </button>
                 </div>

@@ -40,7 +40,7 @@ function Sidebar({ mobile = false, onClose }: { mobile?: boolean; onClose?: () =
       <div className="p-4 border-b border-border flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
           <Image src="/images/logo.png" alt="Logo" width={28} height={28} className="object-contain" />
-          <span className="font-heading text-lg text-[#D4A017] tracking-wider">DESMADRUGADOS</span>
+          <span className="font-heading text-lg text-gold tracking-wider">DESMADRUGADOS</span>
         </Link>
         {mobile && onClose && (
           <button onClick={onClose} className="p-1 text-muted-foreground hover:text-foreground">
@@ -58,7 +58,7 @@ function Sidebar({ mobile = false, onClose }: { mobile?: boolean; onClose?: () =
             onClick={onClose}
             className={`flex items-center gap-3 px-3 py-2.5 rounded text-sm font-medium transition-all ${
               pathname === href
-                ? 'bg-[#D4A017] text-black'
+                ? 'bg-gold text-black'
                 : 'text-muted-foreground hover:text-foreground hover:bg-secondary'
             }`}
           >
@@ -72,7 +72,7 @@ function Sidebar({ mobile = false, onClose }: { mobile?: boolean; onClose?: () =
       <div className="p-3 border-t border-border">
         <button
           onClick={logout}
-          className="flex items-center gap-3 px-3 py-2.5 w-full rounded text-sm text-muted-foreground hover:text-[#B83232] hover:bg-secondary transition-all"
+          className="flex items-center gap-3 px-3 py-2.5 w-full rounded text-sm text-muted-foreground hover:text-red-bar hover:bg-secondary transition-all"
         >
           <LogOut size={16} />
           Cerrar sesión
@@ -116,12 +116,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <header className="md:hidden flex items-center gap-3 p-4 border-b border-border bg-card">
           <button
             onClick={() => setSidebarOpen(true)}
-            className="p-2 rounded border border-border hover:border-[#D4A017] transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+            className="p-2 rounded border border-border hover:border-gold transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
             aria-label="Abrir menú"
           >
             <Menu size={18} />
           </button>
-          <span className="font-heading text-xl text-[#D4A017] tracking-wider">ADMIN</span>
+          <span className="font-heading text-xl text-gold tracking-wider">ADMIN</span>
         </header>
 
         <div className="flex-1 p-4 sm:p-6 lg:p-8 overflow-auto">
