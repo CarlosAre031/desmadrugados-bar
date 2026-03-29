@@ -1,11 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { useLanguage } from '@/context/LanguageContext'
-import { RotateCcw, Shuffle, HelpCircle, Users, Wine, Crown, Trash2, Plus, User, Sparkles } from 'lucide-react'
+import { RotateCcw, Shuffle, HelpCircle, Wine, Crown, Trash2, Plus, User, Sparkles } from 'lucide-react'
 
 // ═══════════════════════════════════════════════════════════════════
-// PICO BOTELLA - Con registro de jugadores
+// PICO BOTELLA - Spin the Bottle with real player targeting
 // ═══════════════════════════════════════════════════════════════════
 interface Player {
   id: number
@@ -43,14 +43,23 @@ function PicoBottle() {
     if (spinning || players.length < 2) return
     setSpinning(true)
     setSelectedPlayer(null)
-    const extra = 1440 + Math.floor(Math.random() * 1080)
-    setAngle(a => a + extra)
+
+    // Pick a random player first
+    const targetIdx = Math.floor(Math.random() * players.length)
+    const target = players[targetIdx]
+
+    // Calculate the angle that points to that player
+    const playerAngleDeg = (targetIdx / players.length) * 360 - 90
+    // Add multiple full rotations for dramatic effect + land on target
+    const fullSpins = 1440 + Math.floor(Math.random() * 720)
+    // The bottle points up by default (0deg = up), we need to rotate to reach the target
+    const targetAngle = fullSpins + playerAngleDeg + 180
+    setAngle(targetAngle)
 
     setTimeout(() => {
-      const selected = players[Math.floor(Math.random() * players.length)]
-      setSelectedPlayer(selected)
+      setSelectedPlayer(target)
       setSpinning(false)
-    }, 3000)
+    }, 3200)
   }
 
   const resetGame = () => {
@@ -61,7 +70,6 @@ function PicoBottle() {
   }
 
   const genderColors = { M: '#3B82F6', F: '#EC4899', X: '#8B5CF6' }
-  const genderLabels = { M: lang === 'es' ? 'Hombre' : 'Male', F: lang === 'es' ? 'Mujer' : 'Female', X: 'Otro/Other' }
 
   if (!gameStarted) {
     return (
@@ -105,7 +113,7 @@ function PicoBottle() {
         </div>
 
         {/* Player list */}
-        <div className="flex flex-wrap gap-2 mb-6 min-h-[60px]">
+        <div className="flex flex-wrap gap-2 mb-6 min-h-[48px]">
           {players.map(p => (
             <div
               key={p.id}
@@ -132,60 +140,103 @@ function PicoBottle() {
     )
   }
 
+  const circleRadius = 130
+  const playerSize = 44
+
   return (
-    <div className="flex flex-col items-center gap-6">
-      {/* Players circle */}
-      <div className="relative w-72 h-72 flex items-center justify-center">
+    <div className="flex flex-col items-center gap-6 w-full">
+      {/* Players circle + bottle */}
+      <div className="relative" style={{ width: circleRadius * 2 + playerSize + 20, height: circleRadius * 2 + playerSize + 20 }}>
         {/* Player positions around circle */}
         {players.map((p, i) => {
           const playerAngle = (i / players.length) * 360 - 90
           const rad = (playerAngle * Math.PI) / 180
-          const x = Math.cos(rad) * 120
-          const y = Math.sin(rad) * 120
+          const centerX = circleRadius + playerSize / 2 + 10
+          const centerY = circleRadius + playerSize / 2 + 10
+          const x = centerX + Math.cos(rad) * circleRadius - playerSize / 2
+          const y = centerY + Math.sin(rad) * circleRadius - playerSize / 2
+          const isSelected = selectedPlayer?.id === p.id
           return (
             <div
               key={p.id}
-              className={`absolute flex flex-col items-center transition-all duration-300 ${selectedPlayer?.id === p.id ? 'scale-125 z-20' : ''}`}
-              style={{ transform: `translate(${x}px, ${y}px)` }}
+              className="absolute flex flex-col items-center"
+              style={{
+                left: x,
+                top: y,
+                width: playerSize,
+                transition: 'transform 0.3s, filter 0.3s',
+                transform: isSelected ? 'scale(1.3)' : 'scale(1)',
+                zIndex: isSelected ? 20 : 1,
+                filter: isSelected ? 'drop-shadow(0 0 12px rgba(212,160,23,0.6))' : 'none',
+              }}
             >
               <div
-                className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm border-2 ${selectedPlayer?.id === p.id ? 'ring-4 ring-gold ring-offset-2 ring-offset-background' : ''}`}
-                style={{ backgroundColor: genderColors[p.gender], borderColor: genderColors[p.gender] }}
+                className="rounded-full flex items-center justify-center text-white font-bold text-sm border-2"
+                style={{
+                  width: playerSize,
+                  height: playerSize,
+                  backgroundColor: genderColors[p.gender],
+                  borderColor: isSelected ? '#D4A017' : genderColors[p.gender],
+                  boxShadow: isSelected ? '0 0 0 3px rgba(212,160,23,0.4)' : 'none',
+                }}
               >
                 {p.name.charAt(0).toUpperCase()}
               </div>
-              <span className={`text-xs mt-1 max-w-[60px] truncate ${selectedPlayer?.id === p.id ? 'text-gold font-bold' : 'text-muted-foreground'}`}>
+              <span className={`text-[11px] mt-1 max-w-[60px] truncate text-center ${isSelected ? 'text-gold font-bold' : 'text-muted-foreground'}`}>
                 {p.name}
               </span>
             </div>
           )
         })}
 
-        {/* Center circle */}
-        <div className="absolute w-24 h-24 rounded-full border-2 border-gold/30 bg-card" />
-
-        {/* Bottle */}
+        {/* Center area with bottle */}
         <div
-          className="w-4 h-20 rounded-full bg-gradient-to-t from-gold to-orange-bar relative z-10"
+          className="absolute rounded-full border-2 border-gold/20 bg-card/80"
           style={{
+            width: 80,
+            height: 80,
+            left: circleRadius + playerSize / 2 + 10 - 40,
+            top: circleRadius + playerSize / 2 + 10 - 40,
+          }}
+        />
+
+        {/* Bottle SVG */}
+        <div
+          className="absolute"
+          style={{
+            width: 24,
+            height: 100,
+            left: circleRadius + playerSize / 2 + 10 - 12,
+            top: circleRadius + playerSize / 2 + 10 - 50,
             transform: `rotate(${angle}deg)`,
-            transition: spinning ? 'transform 3s cubic-bezier(0.17,0.67,0.12,1)' : 'none',
-            transformOrigin: '50% 100%',
-            marginTop: '-40px',
+            transformOrigin: '50% 50%',
+            transition: spinning ? 'transform 3.2s cubic-bezier(0.15, 0.6, 0.15, 1)' : 'none',
           }}
         >
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2 h-5 rounded-full bg-[#8B6914]" />
+          <svg viewBox="0 0 24 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+            {/* Bottle neck */}
+            <rect x="9" y="0" width="6" height="20" rx="2" fill="#8B6914" />
+            {/* Bottle cap */}
+            <rect x="8" y="0" width="8" height="6" rx="2" fill="#D4A017" />
+            {/* Bottle body */}
+            <path d="M9 20 L6 30 L6 85 Q6 95 12 95 Q18 95 18 85 L18 30 L15 20 Z" fill="url(#bottleGrad)" />
+            {/* Label */}
+            <rect x="7" y="50" width="10" height="20" rx="1" fill="#FFF8E1" opacity="0.3" />
+            <defs>
+              <linearGradient id="bottleGrad" x1="6" y1="20" x2="18" y2="95" gradientUnits="userSpaceOnUse">
+                <stop stopColor="#4A7C32" />
+                <stop offset="1" stopColor="#2D5A1B" />
+              </linearGradient>
+            </defs>
+          </svg>
         </div>
-
-        {/* Center dot */}
-        <div className="absolute w-5 h-5 rounded-full bg-gold z-20" style={{ marginTop: '40px' }} />
       </div>
 
       {/* Selected player announcement */}
       {selectedPlayer && (
-        <div className="text-center animate-pulse">
+        <div className="text-center">
           <p className="text-sm text-muted-foreground mb-1">{lang === 'es' ? '¡Le tocó a...' : 'It landed on...'}</p>
-          <p className="font-heading text-4xl" style={{ color: genderColors[selectedPlayer.gender] }}>
+          <p className="font-heading text-5xl animate-bounce" style={{ color: genderColors[selectedPlayer.gender] }}>
             {selectedPlayer.name}
           </p>
         </div>
@@ -197,11 +248,15 @@ function PicoBottle() {
           disabled={spinning}
           className="px-8 py-3 font-heading text-2xl tracking-wider bg-gold text-black rounded hover:bg-orange-bar disabled:opacity-50 transition-all min-h-[44px]"
         >
-          {spinning ? '...' : lang === 'es' ? 'Girar' : 'Spin'}
+          {spinning
+            ? (lang === 'es' ? 'Girando...' : 'Spinning...')
+            : (lang === 'es' ? 'Girar' : 'Spin')
+          }
         </button>
         <button
           onClick={resetGame}
-          className="px-4 py-3 border border-border rounded hover:border-red-bar hover:text-red-bar transition-all"
+          className="px-4 py-3 border border-border rounded hover:border-red-bar hover:text-red-bar transition-all min-h-[44px]"
+          aria-label={lang === 'es' ? 'Reiniciar' : 'Reset'}
         >
           <RotateCcw size={18} />
         </button>
@@ -281,9 +336,15 @@ function NuncaNunca() {
 
   return (
     <div className="flex flex-col items-center gap-6 text-center max-w-md mx-auto">
-      {current && (
-        <div className="border border-red-bar/40 rounded-lg p-6 bg-card">
+      {current ? (
+        <div className="border border-red-bar/40 rounded-lg p-6 bg-card w-full">
           <p className="font-heading text-2xl text-red-bar leading-tight">{current}</p>
+        </div>
+      ) : (
+        <div className="border border-border/30 rounded-lg p-6 w-full">
+          <p className="text-muted-foreground">
+            {lang === 'es' ? 'Presiona "Siguiente" para empezar' : 'Press "Next" to start'}
+          </p>
         </div>
       )}
       <p className="text-xs text-muted-foreground">
@@ -296,7 +357,7 @@ function NuncaNunca() {
         {lang === 'es' ? 'Siguiente' : 'Next'}
       </button>
       <p className="text-xs text-muted-foreground">
-        {used.length}/{list.length}
+        {used.length}/{list.length} {lang === 'es' ? 'usadas' : 'used'}
       </p>
     </div>
   )
@@ -344,28 +405,54 @@ const VERDAD_EN = [
 function VerdadOTrago() {
   const { lang } = useLanguage()
   const [current, setCurrent] = useState<string | null>(null)
+  const [used, setUsed] = useState<number[]>([])
   const list = lang === 'es' ? VERDAD_ES : VERDAD_EN
 
   const next = () => {
-    setCurrent(list[Math.floor(Math.random() * list.length)])
+    const available = list.map((_, i) => i).filter(i => !used.includes(i))
+    if (available.length === 0) {
+      setUsed([])
+      const idx = Math.floor(Math.random() * list.length)
+      setCurrent(list[idx])
+      setUsed([idx])
+    } else {
+      const idx = available[Math.floor(Math.random() * available.length)]
+      setCurrent(list[idx])
+      setUsed([...used, idx])
+    }
   }
 
   return (
     <div className="flex flex-col items-center gap-6 text-center max-w-md mx-auto">
-      {current && (
-        <div className="border border-orange-bar/40 rounded-lg p-6 bg-card">
+      {current ? (
+        <div className="border border-orange-bar/40 rounded-lg p-6 bg-card w-full">
           <p className="font-heading text-2xl text-orange-bar leading-tight">{current}</p>
         </div>
+      ) : (
+        <div className="border border-border/30 rounded-lg p-6 w-full">
+          <p className="text-muted-foreground">
+            {lang === 'es' ? 'Presiona para sacar una pregunta' : 'Press to draw a question'}
+          </p>
+        </div>
       )}
-      <p className="text-xs text-muted-foreground">
-        {lang === 'es' ? '¿Responde honestamente o toma un trago?' : 'Answer honestly or take a shot?'}
-      </p>
+      <div className="flex items-center gap-4">
+        <span className="text-sm text-muted-foreground px-3 py-1 border border-border rounded">
+          🗣️ {lang === 'es' ? 'Verdad' : 'Truth'}
+        </span>
+        <span className="text-xs text-muted-foreground">{lang === 'es' ? 'o' : 'or'}</span>
+        <span className="text-sm text-muted-foreground px-3 py-1 border border-border rounded">
+          🍺 {lang === 'es' ? 'Trago' : 'Drink'}
+        </span>
+      </div>
       <button
         onClick={next}
         className="px-8 py-3 font-heading text-2xl tracking-wider bg-orange-bar text-white rounded hover:bg-red-bar transition-all min-h-[44px]"
       >
         {lang === 'es' ? 'Sacar pregunta' : 'Draw question'}
       </button>
+      <p className="text-xs text-muted-foreground">
+        {used.length}/{list.length} {lang === 'es' ? 'usadas' : 'used'}
+      </p>
     </div>
   )
 }
@@ -406,27 +493,42 @@ const REY_EN = [
 function ReyDeLaMesa() {
   const { lang } = useLanguage()
   const [current, setCurrent] = useState<string | null>(null)
+  const [used, setUsed] = useState<number[]>([])
   const [hasKing, setHasKing] = useState(false)
   const list = lang === 'es' ? REY_ES : REY_EN
 
   const crownKing = () => {
     setHasKing(true)
     setCurrent(null)
+    setUsed([])
   }
 
   const drawChallenge = () => {
-    setCurrent(list[Math.floor(Math.random() * list.length)])
+    const available = list.map((_, i) => i).filter(i => !used.includes(i))
+    if (available.length === 0) {
+      setUsed([])
+      const idx = Math.floor(Math.random() * list.length)
+      setCurrent(list[idx])
+      setUsed([idx])
+    } else {
+      const idx = available[Math.floor(Math.random() * available.length)]
+      setCurrent(list[idx])
+      setUsed([...used, idx])
+    }
   }
 
   const abdicate = () => {
     setHasKing(false)
     setCurrent(null)
+    setUsed([])
   }
 
   if (!hasKing) {
     return (
       <div className="flex flex-col items-center gap-4 text-center">
-        <Crown size={48} className="text-gold" />
+        <div className="w-20 h-20 rounded-full bg-gold/10 border-2 border-gold/30 flex items-center justify-center">
+          <Crown size={40} className="text-gold" />
+        </div>
         <p className="text-sm text-muted-foreground max-w-xs">
           {lang === 'es'
             ? 'Alguien debe ser el Rey de la Mesa. El Rey tiene el poder absoluto... por ahora.'
@@ -447,11 +549,18 @@ function ReyDeLaMesa() {
       <div className="flex items-center gap-2">
         <Crown size={24} className="text-gold" />
         <span className="font-heading text-xl text-gold">{lang === 'es' ? 'El Rey manda' : 'The King commands'}</span>
+        <Crown size={24} className="text-gold" />
       </div>
 
-      {current && (
-        <div className="border border-gold/40 rounded-lg p-6 bg-card">
+      {current ? (
+        <div className="border border-gold/40 rounded-lg p-6 bg-card w-full">
           <p className="font-heading text-2xl text-gold leading-tight">{current}</p>
+        </div>
+      ) : (
+        <div className="border border-border/30 rounded-lg p-6 w-full">
+          <p className="text-muted-foreground">
+            {lang === 'es' ? 'Presiona para sacar una orden' : 'Press to draw an order'}
+          </p>
         </div>
       )}
 
@@ -464,77 +573,125 @@ function ReyDeLaMesa() {
         </button>
         <button
           onClick={abdicate}
-          className="px-4 py-3 border border-red-bar/50 text-red-bar rounded hover:bg-red-bar hover:text-white transition-all text-sm"
+          className="px-4 py-3 border border-red-bar/50 text-red-bar rounded hover:bg-red-bar hover:text-white transition-all text-sm min-h-[44px]"
         >
           {lang === 'es' ? 'Abdicar' : 'Abdicate'}
         </button>
       </div>
+      <p className="text-xs text-muted-foreground">
+        {used.length}/{list.length} {lang === 'es' ? 'órdenes usadas' : 'orders used'}
+      </p>
     </div>
   )
 }
 
 // ═══════════════════════════════════════════════════════════════════
-// JUEGO DE TAPAS - Caps Game
+// JUEGO DE TAPAS - Caps Game (improved visual)
 // ═══════════════════════════════════════════════════════════════════
 function JuegoDeTapas() {
   const { lang } = useLanguage()
   const [caps, setCaps] = useState<number | null>(null)
   const [guess, setGuess] = useState('')
-  const [result, setResult] = useState<string | null>(null)
+  const [result, setResult] = useState<'correct' | 'wrong' | null>(null)
+  const [revealed, setRevealed] = useState(false)
+  const [score, setScore] = useState({ wins: 0, losses: 0 })
 
   const newRound = () => {
     setCaps(Math.floor(Math.random() * 10) + 1)
     setGuess('')
     setResult(null)
+    setRevealed(false)
   }
 
   const check = () => {
     if (!caps || !guess) return
     const g = parseInt(guess)
+    if (isNaN(g)) return
+    setRevealed(true)
     if (g === caps) {
-      setResult(lang === 'es' ? `✓ ¡Correcto! Eran ${caps} tapas.` : `✓ Correct! It was ${caps} caps.`)
+      setResult('correct')
+      setScore(s => ({ ...s, wins: s.wins + 1 }))
     } else {
-      setResult(lang === 'es' ? `✗ Eran ${caps} tapas. ¡Toma!` : `✗ It was ${caps} caps. Drink!`)
+      setResult('wrong')
+      setScore(s => ({ ...s, losses: s.losses + 1 }))
     }
   }
 
   return (
-    <div className="flex flex-col items-center gap-4">
+    <div className="flex flex-col items-center gap-5 max-w-sm mx-auto">
       {caps === null ? (
-        <button
-          onClick={newRound}
-          className="px-8 py-3 font-heading text-2xl tracking-wider bg-red-bar text-white rounded hover:bg-orange-bar transition-all min-h-[44px]"
-        >
-          {lang === 'es' ? 'Nuevo juego' : 'New game'}
-        </button>
+        <>
+          <p className="text-sm text-muted-foreground text-center">
+            {lang === 'es'
+              ? 'Se esconden tapas de botella en la mano. ¿Cuántas hay? Si fallas, ¡tomas!'
+              : 'Bottle caps are hidden in the hand. How many? If you miss, drink!'}
+          </p>
+          <button
+            onClick={newRound}
+            className="px-8 py-3 font-heading text-2xl tracking-wider bg-red-bar text-white rounded hover:bg-orange-bar transition-all min-h-[44px]"
+          >
+            {lang === 'es' ? 'Empezar' : 'Start'}
+          </button>
+        </>
       ) : (
         <>
-          <p className="text-muted-foreground text-sm">{lang === 'es' ? '¿Cuántas tapas hay?' : 'How many caps?'}</p>
-          <div className="flex gap-2">
-            <input
-              type="number"
-              min="1"
-              max="20"
-              value={guess}
-              onChange={(e) => setGuess(e.target.value)}
-              className="w-20 text-center text-2xl font-heading bg-card border border-border rounded p-2 focus:border-gold outline-none text-foreground"
-              placeholder="?"
-            />
-            <button
-              onClick={check}
-              className="px-6 py-2 font-heading text-xl bg-gold text-black rounded hover:bg-orange-bar transition-all min-h-[44px]"
-            >
-              OK
-            </button>
+          {/* Visual caps display */}
+          <div className="relative w-32 h-32 rounded-full bg-secondary/40 border-2 border-border flex items-center justify-center">
+            {revealed ? (
+              <span className="font-heading text-5xl text-gold">{caps}</span>
+            ) : (
+              <span className="text-4xl">✊</span>
+            )}
           </div>
-          {result && (
-            <div className={`text-center font-heading text-xl px-4 py-2 rounded ${result.startsWith('✓') ? 'text-green-400' : 'text-red-bar'}`}>
-              {result}
-            </div>
+
+          {!revealed ? (
+            <>
+              <p className="text-muted-foreground text-sm">
+                {lang === 'es' ? '¿Cuántas tapas hay? (1-10)' : 'How many caps? (1-10)'}
+              </p>
+              <div className="flex gap-2">
+                <input
+                  type="number"
+                  min="1"
+                  max="10"
+                  value={guess}
+                  onChange={(e) => setGuess(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && check()}
+                  className="w-20 text-center text-2xl font-heading bg-card border border-border rounded p-2 focus:border-gold outline-none text-foreground"
+                  placeholder="?"
+                />
+                <button
+                  onClick={check}
+                  disabled={!guess}
+                  className="px-6 py-2 font-heading text-xl bg-gold text-black rounded hover:bg-orange-bar disabled:opacity-50 transition-all min-h-[44px]"
+                >
+                  OK
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className={`text-center font-heading text-2xl px-4 py-2 rounded ${result === 'correct' ? 'text-green-400' : 'text-red-bar'}`}>
+                {result === 'correct'
+                  ? (lang === 'es' ? `¡Correcto! Eran ${caps}` : `Correct! It was ${caps}`)
+                  : (lang === 'es' ? `Eran ${caps}. ¡Toma! 🍺` : `It was ${caps}. Drink! 🍺`)
+                }
+              </div>
+              <button
+                onClick={newRound}
+                className="px-6 py-2 font-heading text-lg bg-gold text-black rounded hover:bg-orange-bar transition-all min-h-[44px]"
+              >
+                {lang === 'es' ? 'Otra ronda' : 'Next round'}
+              </button>
+            </>
           )}
-          <button onClick={newRound} className="text-xs text-muted-foreground hover:text-gold mt-2 transition-colors">
-            {lang === 'es' ? 'Nuevo juego' : 'New game'}
-          </button>
+
+          {/* Score */}
+          {(score.wins > 0 || score.losses > 0) && (
+            <p className="text-xs text-muted-foreground">
+              ✓ {score.wins} — ✗ {score.losses}
+            </p>
+          )}
         </>
       )}
     </div>
@@ -585,17 +742,34 @@ const RETOS_EN = [
 function RetosGrupales() {
   const { lang } = useLanguage()
   const [challenge, setChallenge] = useState<string | null>(null)
+  const [used, setUsed] = useState<number[]>([])
   const list = lang === 'es' ? RETOS_ES : RETOS_EN
 
   const draw = () => {
-    setChallenge(list[Math.floor(Math.random() * list.length)])
+    const available = list.map((_, i) => i).filter(i => !used.includes(i))
+    if (available.length === 0) {
+      setUsed([])
+      const idx = Math.floor(Math.random() * list.length)
+      setChallenge(list[idx])
+      setUsed([idx])
+    } else {
+      const idx = available[Math.floor(Math.random() * available.length)]
+      setChallenge(list[idx])
+      setUsed([...used, idx])
+    }
   }
 
   return (
-    <div className="flex flex-col items-center gap-4 text-center">
-      {challenge && (
-        <div className="border border-orange-bar/40 rounded p-4 bg-card max-w-xs">
+    <div className="flex flex-col items-center gap-5 text-center max-w-md mx-auto">
+      {challenge ? (
+        <div className="border border-orange-bar/40 rounded-lg p-6 bg-card w-full">
           <p className="font-heading text-2xl text-orange-bar leading-tight">{challenge}</p>
+        </div>
+      ) : (
+        <div className="border border-border/30 rounded-lg p-6 w-full">
+          <p className="text-muted-foreground">
+            {lang === 'es' ? 'Presiona para sacar un reto' : 'Press to draw a challenge'}
+          </p>
         </div>
       )}
       <button
@@ -604,6 +778,9 @@ function RetosGrupales() {
       >
         {lang === 'es' ? 'Sacar reto' : 'Draw challenge'}
       </button>
+      <p className="text-xs text-muted-foreground">
+        {used.length}/{list.length} {lang === 'es' ? 'usados' : 'used'}
+      </p>
     </div>
   )
 }
@@ -617,13 +794,13 @@ export default function GamesSection() {
   const { lang } = useLanguage()
   const [active, setActive] = useState<GameTab>('bottle')
 
-  const tabs: { id: GameTab; label: string; icon: React.ReactNode }[] = [
-    { id: 'bottle', label: lang === 'es' ? 'Pico Botella' : 'Spin the Bottle', icon: <RotateCcw size={16} /> },
-    { id: 'nunca', label: lang === 'es' ? 'Nunca Nunca' : 'Never Have I', icon: <Wine size={16} /> },
-    { id: 'verdad', label: lang === 'es' ? 'Verdad o Trago' : 'Truth or Drink', icon: <Sparkles size={16} /> },
-    { id: 'rey', label: lang === 'es' ? 'Rey de la Mesa' : 'King of Table', icon: <Crown size={16} /> },
-    { id: 'caps', label: lang === 'es' ? 'Tapas' : 'Caps', icon: <HelpCircle size={16} /> },
-    { id: 'retos', label: lang === 'es' ? 'Retos' : 'Challenges', icon: <Shuffle size={16} /> },
+  const tabs: { id: GameTab; label: string; labelShort: string; icon: React.ReactNode }[] = [
+    { id: 'bottle', label: lang === 'es' ? 'Pico Botella' : 'Spin the Bottle', labelShort: lang === 'es' ? 'Botella' : 'Bottle', icon: <RotateCcw size={16} /> },
+    { id: 'nunca', label: lang === 'es' ? 'Nunca Nunca' : 'Never Have I', labelShort: lang === 'es' ? 'Nunca' : 'Never', icon: <Wine size={16} /> },
+    { id: 'verdad', label: lang === 'es' ? 'Verdad o Trago' : 'Truth or Drink', labelShort: lang === 'es' ? 'Verdad' : 'Truth', icon: <Sparkles size={16} /> },
+    { id: 'rey', label: lang === 'es' ? 'Rey de la Mesa' : 'King of Table', labelShort: lang === 'es' ? 'Rey' : 'King', icon: <Crown size={16} /> },
+    { id: 'caps', label: lang === 'es' ? 'Tapas' : 'Caps', labelShort: lang === 'es' ? 'Tapas' : 'Caps', icon: <HelpCircle size={16} /> },
+    { id: 'retos', label: lang === 'es' ? 'Retos' : 'Challenges', labelShort: lang === 'es' ? 'Retos' : 'Retos', icon: <Shuffle size={16} /> },
   ]
 
   const descriptions: Record<GameTab, { es: string; en: string }> = {
@@ -653,13 +830,14 @@ export default function GamesSection() {
             <button
               key={tab.id}
               onClick={() => setActive(tab.id)}
-              className={`flex items-center gap-2 px-4 py-2 font-heading text-lg tracking-wider rounded border transition-all min-h-[44px] ${
+              className={`flex items-center gap-2 px-3 sm:px-4 py-2 font-heading text-base sm:text-lg tracking-wider rounded border transition-all min-h-[44px] ${
                 active === tab.id
                   ? 'bg-gold text-black border-gold'
                   : 'border-border hover:border-gold hover:text-gold'
               }`}
             >
               {tab.icon}
+              <span className="sm:hidden">{tab.labelShort}</span>
               <span className="hidden sm:inline">{tab.label}</span>
             </button>
           ))}
