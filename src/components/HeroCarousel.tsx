@@ -46,7 +46,7 @@ export default function HeroCarousel({ images }: Props) {
             src={img.src}
             alt={lang === 'es' ? img.alt : img.altEn}
             fill
-            className="object-cover"
+            className="object-cover object-center"
             priority={i === 0}
             sizes="100vw"
             unoptimized
@@ -54,22 +54,22 @@ export default function HeroCarousel({ images }: Props) {
         </div>
       ))}
 
-      {/* Dark overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
+      {/* Dark overlay — stronger on mobile for readability */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/40 sm:from-black/80 sm:via-black/40 sm:to-black/20" />
 
       {/* Controls */}
       {images.length > 1 && (
         <>
           <button
             onClick={prev}
-            className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 border border-gold/30 hover:border-gold text-white p-2 rounded transition-all min-h-[44px] min-w-[44px] flex items-center justify-center"
+            className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 border border-white/20 hover:border-gold text-white p-2 rounded-full transition-all min-h-[44px] min-w-[44px] flex items-center justify-center"
             aria-label="Imagen anterior"
           >
             <ChevronLeft size={20} />
           </button>
           <button
             onClick={next}
-            className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 border border-gold/30 hover:border-gold text-white p-2 rounded transition-all min-h-[44px] min-w-[44px] flex items-center justify-center"
+            className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 border border-white/20 hover:border-gold text-white p-2 rounded-full transition-all min-h-[44px] min-w-[44px] flex items-center justify-center"
             aria-label="Siguiente imagen"
           >
             <ChevronRight size={20} />
@@ -81,8 +81,8 @@ export default function HeroCarousel({ images }: Props) {
               <button
                 key={i}
                 onClick={() => setCurrent(i)}
-                className={`w-2 h-2 rounded-full transition-all ${
-                  i === current ? 'bg-gold w-6' : 'bg-white/40'
+                className={`h-2 rounded-full transition-all ${
+                  i === current ? 'bg-gold w-6' : 'bg-white/40 w-2'
                 }`}
                 aria-label={`Ir a imagen ${i + 1}`}
               />

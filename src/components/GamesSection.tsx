@@ -21,7 +21,9 @@ function PicoBottle() {
   const [angle, setAngle] = useState(0)
   const [spinning, setSpinning] = useState(false)
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null)
+  const [currentTurn, setCurrentTurn] = useState(0) // index of who spins
   const [gameStarted, setGameStarted] = useState(false)
+  const [history, setHistory] = useState<{ spinner: Player; target: Player }[]>([])
 
   const addPlayer = () => {
     if (!newName.trim() || players.length >= 12) return
@@ -37,29 +39,38 @@ function PicoBottle() {
     if (players.length < 2) return
     setGameStarted(true)
     setSelectedPlayer(null)
+    setCurrentTurn(0)
+    setHistory([])
   }
+
+  const spinner = players[currentTurn % players.length]
 
   const spin = () => {
     if (spinning || players.length < 2) return
     setSpinning(true)
     setSelectedPlayer(null)
 
-    // Pick a random player first
-    const targetIdx = Math.floor(Math.random() * players.length)
-    const target = players[targetIdx]
+    // Pick a random OTHER player (not the spinner)
+    const others = players.filter(p => p.id !== spinner.id)
+    const target = others[Math.floor(Math.random() * others.length)]
+    const targetIdx = players.findIndex(p => p.id === target.id)
 
     // Calculate the angle that points to that player
     const playerAngleDeg = (targetIdx / players.length) * 360 - 90
-    // Add multiple full rotations for dramatic effect + land on target
     const fullSpins = 1440 + Math.floor(Math.random() * 720)
-    // The bottle points up by default (0deg = up), we need to rotate to reach the target
     const targetAngle = fullSpins + playerAngleDeg + 180
     setAngle(targetAngle)
 
     setTimeout(() => {
       setSelectedPlayer(target)
+      setHistory(h => [...h, { spinner, target }])
       setSpinning(false)
     }, 3200)
+  }
+
+  const nextTurn = () => {
+    setCurrentTurn(t => t + 1)
+    setSelectedPlayer(null)
   }
 
   const resetGame = () => {
@@ -67,6 +78,8 @@ function PicoBottle() {
     setPlayers([])
     setSelectedPlayer(null)
     setAngle(0)
+    setCurrentTurn(0)
+    setHistory([])
   }
 
   const genderColors = { M: '#3B82F6', F: '#EC4899', X: '#8B5CF6' }
@@ -140,11 +153,21 @@ function PicoBottle() {
     )
   }
 
-  const circleRadius = 130
-  const playerSize = 44
+  const circleRadius = 120
+  const playerSize = 42
 
   return (
-    <div className="flex flex-col items-center gap-6 w-full">
+    <div className="flex flex-col items-center gap-4 w-full">
+      {/* Who is spinning */}
+      <div className="text-center">
+        <p className="text-xs text-muted-foreground mb-1">
+          {lang === 'es' ? 'Turno de' : 'Turn of'}
+        </p>
+        <p className="font-heading text-2xl" style={{ color: genderColors[spinner.gender] }}>
+          🍾 {spinner.name}
+        </p>
+      </div>
+
       {/* Players circle + bottle */}
       <div className="relative" style={{ width: circleRadius * 2 + playerSize + 20, height: circleRadius * 2 + playerSize + 20 }}>
         {/* Player positions around circle */}
@@ -156,6 +179,7 @@ function PicoBottle() {
           const x = centerX + Math.cos(rad) * circleRadius - playerSize / 2
           const y = centerY + Math.sin(rad) * circleRadius - playerSize / 2
           const isSelected = selectedPlayer?.id === p.id
+          const isSpinner = spinner.id === p.id
           return (
             <div
               key={p.id}
@@ -166,7 +190,7 @@ function PicoBottle() {
                 width: playerSize,
                 transition: 'transform 0.3s, filter 0.3s',
                 transform: isSelected ? 'scale(1.3)' : 'scale(1)',
-                zIndex: isSelected ? 20 : 1,
+                zIndex: isSelected ? 20 : isSpinner ? 15 : 1,
                 filter: isSelected ? 'drop-shadow(0 0 12px rgba(212,160,23,0.6))' : 'none',
               }}
             >
@@ -176,27 +200,27 @@ function PicoBottle() {
                   width: playerSize,
                   height: playerSize,
                   backgroundColor: genderColors[p.gender],
-                  borderColor: isSelected ? '#D4A017' : genderColors[p.gender],
-                  boxShadow: isSelected ? '0 0 0 3px rgba(212,160,23,0.4)' : 'none',
+                  borderColor: isSelected ? '#D4A017' : isSpinner ? '#D4A017' : genderColors[p.gender],
+                  boxShadow: isSelected ? '0 0 0 3px rgba(212,160,23,0.4)' : isSpinner ? '0 0 0 2px rgba(212,160,23,0.3)' : 'none',
                 }}
               >
                 {p.name.charAt(0).toUpperCase()}
               </div>
-              <span className={`text-[11px] mt-1 max-w-[60px] truncate text-center ${isSelected ? 'text-gold font-bold' : 'text-muted-foreground'}`}>
-                {p.name}
+              <span className={`text-[11px] mt-1 max-w-[60px] truncate text-center ${isSelected ? 'text-gold font-bold' : isSpinner ? 'text-gold' : 'text-muted-foreground'}`}>
+                {isSpinner && '🍾 '}{p.name}
               </span>
             </div>
           )
         })}
 
-        {/* Center area with bottle */}
+        {/* Center area */}
         <div
           className="absolute rounded-full border-2 border-gold/20 bg-card/80"
           style={{
-            width: 80,
-            height: 80,
-            left: circleRadius + playerSize / 2 + 10 - 40,
-            top: circleRadius + playerSize / 2 + 10 - 40,
+            width: 70,
+            height: 70,
+            left: circleRadius + playerSize / 2 + 10 - 35,
+            top: circleRadius + playerSize / 2 + 10 - 35,
           }}
         />
 
@@ -204,23 +228,19 @@ function PicoBottle() {
         <div
           className="absolute"
           style={{
-            width: 24,
-            height: 100,
-            left: circleRadius + playerSize / 2 + 10 - 12,
-            top: circleRadius + playerSize / 2 + 10 - 50,
+            width: 22,
+            height: 90,
+            left: circleRadius + playerSize / 2 + 10 - 11,
+            top: circleRadius + playerSize / 2 + 10 - 45,
             transform: `rotate(${angle}deg)`,
             transformOrigin: '50% 50%',
             transition: spinning ? 'transform 3.2s cubic-bezier(0.15, 0.6, 0.15, 1)' : 'none',
           }}
         >
           <svg viewBox="0 0 24 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-            {/* Bottle neck */}
             <rect x="9" y="0" width="6" height="20" rx="2" fill="#8B6914" />
-            {/* Bottle cap */}
             <rect x="8" y="0" width="8" height="6" rx="2" fill="#D4A017" />
-            {/* Bottle body */}
             <path d="M9 20 L6 30 L6 85 Q6 95 12 95 Q18 95 18 85 L18 30 L15 20 Z" fill="url(#bottleGrad)" />
-            {/* Label */}
             <rect x="7" y="50" width="10" height="20" rx="1" fill="#FFF8E1" opacity="0.3" />
             <defs>
               <linearGradient id="bottleGrad" x1="6" y1="20" x2="18" y2="95" gradientUnits="userSpaceOnUse">
@@ -232,27 +252,50 @@ function PicoBottle() {
         </div>
       </div>
 
-      {/* Selected player announcement */}
+      {/* Result: who with who */}
       {selectedPlayer && (
-        <div className="text-center">
-          <p className="text-sm text-muted-foreground mb-1">{lang === 'es' ? '¡Le tocó a...' : 'It landed on...'}</p>
-          <p className="font-heading text-5xl animate-bounce" style={{ color: genderColors[selectedPlayer.gender] }}>
-            {selectedPlayer.name}
+        <div className="text-center border border-gold/30 rounded-lg p-4 bg-card w-full max-w-xs">
+          <p className="text-xs text-muted-foreground mb-2">
+            {lang === 'es' ? '¡La botella decidió!' : 'The bottle has decided!'}
           </p>
+          <div className="flex items-center justify-center gap-3">
+            <div className="flex flex-col items-center">
+              <div className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm" style={{ backgroundColor: genderColors[spinner.gender] }}>
+                {spinner.name.charAt(0).toUpperCase()}
+              </div>
+              <span className="text-xs mt-1 font-semibold" style={{ color: genderColors[spinner.gender] }}>{spinner.name}</span>
+            </div>
+            <span className="font-heading text-2xl text-gold">❤️</span>
+            <div className="flex flex-col items-center">
+              <div className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm" style={{ backgroundColor: genderColors[selectedPlayer.gender] }}>
+                {selectedPlayer.name.charAt(0).toUpperCase()}
+              </div>
+              <span className="text-xs mt-1 font-semibold" style={{ color: genderColors[selectedPlayer.gender] }}>{selectedPlayer.name}</span>
+            </div>
+          </div>
         </div>
       )}
 
       <div className="flex gap-3">
-        <button
-          onClick={spin}
-          disabled={spinning}
-          className="px-8 py-3 font-heading text-2xl tracking-wider bg-gold text-black rounded hover:bg-orange-bar disabled:opacity-50 transition-all min-h-[44px]"
-        >
-          {spinning
-            ? (lang === 'es' ? 'Girando...' : 'Spinning...')
-            : (lang === 'es' ? 'Girar' : 'Spin')
-          }
-        </button>
+        {selectedPlayer ? (
+          <button
+            onClick={nextTurn}
+            className="px-8 py-3 font-heading text-2xl tracking-wider bg-gold text-black rounded hover:bg-orange-bar transition-all min-h-[44px]"
+          >
+            {lang === 'es' ? 'Siguiente turno' : 'Next turn'}
+          </button>
+        ) : (
+          <button
+            onClick={spin}
+            disabled={spinning}
+            className="px-8 py-3 font-heading text-2xl tracking-wider bg-gold text-black rounded hover:bg-orange-bar disabled:opacity-50 transition-all min-h-[44px]"
+          >
+            {spinning
+              ? (lang === 'es' ? 'Girando...' : 'Spinning...')
+              : (lang === 'es' ? '¡Girar!' : 'Spin!')
+            }
+          </button>
+        )}
         <button
           onClick={resetGame}
           className="px-4 py-3 border border-border rounded hover:border-red-bar hover:text-red-bar transition-all min-h-[44px]"
@@ -261,6 +304,22 @@ function PicoBottle() {
           <RotateCcw size={18} />
         </button>
       </div>
+
+      {/* History */}
+      {history.length > 0 && (
+        <div className="w-full max-w-xs">
+          <p className="text-xs text-muted-foreground mb-2 text-center">
+            {lang === 'es' ? `Ronda ${history.length}` : `Round ${history.length}`}
+          </p>
+          <div className="flex flex-wrap gap-1 justify-center">
+            {history.slice(-5).map((h, i) => (
+              <span key={i} className="text-xs px-2 py-1 rounded bg-secondary/30 text-muted-foreground">
+                {h.spinner.name} ❤️ {h.target.name}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   )
 }
