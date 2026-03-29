@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef, memo } from 'react'
 import { useLanguage } from '@/context/LanguageContext'
 import { RotateCcw, Shuffle, HelpCircle, Wine, Crown, Trash2, Plus, User, Sparkles } from 'lucide-react'
 
@@ -19,11 +19,13 @@ function PicoBottle() {
   const [newName, setNewName] = useState('')
   const [newGender, setNewGender] = useState<'M' | 'F' | 'X'>('M')
   const [angle, setAngle] = useState(0)
+  const [animating, setAnimating] = useState(false) // controls CSS transition
   const [spinning, setSpinning] = useState(false)
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null)
-  const [currentTurn, setCurrentTurn] = useState(0) // index of who spins
+  const [currentTurn, setCurrentTurn] = useState(0)
   const [gameStarted, setGameStarted] = useState(false)
   const [history, setHistory] = useState<{ spinner: Player; target: Player }[]>([])
+  const spinTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const addPlayer = () => {
     if (!newName.trim() || players.length >= 12) return
@@ -55,13 +57,24 @@ function PicoBottle() {
     const target = others[Math.floor(Math.random() * others.length)]
     const targetIdx = players.findIndex(p => p.id === target.id)
 
-    // Calculate the angle that points to that player
+    // Calculate target angle — keep it bounded (4-6 full spins max)
     const playerAngleDeg = (targetIdx / players.length) * 360 - 90
-    const fullSpins = 1440 + Math.floor(Math.random() * 720)
+    const fullSpins = 1440 + Math.floor(Math.random() * 360)
     const targetAngle = fullSpins + playerAngleDeg + 180
-    setAngle(targetAngle)
 
-    setTimeout(() => {
+    // Reset angle without animation, then animate to target
+    setAnimating(false)
+    setAngle(0)
+    // Use rAF to ensure the reset paints before we start animating
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setAnimating(true)
+        setAngle(targetAngle)
+      })
+    })
+
+    if (spinTimer.current) clearTimeout(spinTimer.current)
+    spinTimer.current = setTimeout(() => {
       setSelectedPlayer(target)
       setHistory(h => [...h, { spinner, target }])
       setSpinning(false)
@@ -71,13 +84,18 @@ function PicoBottle() {
   const nextTurn = () => {
     setCurrentTurn(t => t + 1)
     setSelectedPlayer(null)
+    // Reset bottle to 0 without animation for clean next spin
+    setAnimating(false)
+    setAngle(0)
   }
 
   const resetGame = () => {
+    if (spinTimer.current) clearTimeout(spinTimer.current)
     setGameStarted(false)
     setPlayers([])
     setSelectedPlayer(null)
     setAngle(0)
+    setAnimating(false)
     setCurrentTurn(0)
     setHistory([])
   }
@@ -224,7 +242,7 @@ function PicoBottle() {
           }}
         />
 
-        {/* Bottle SVG */}
+        {/* Bottle SVG — GPU-accelerated */}
         <div
           className="absolute"
           style={{
@@ -234,7 +252,8 @@ function PicoBottle() {
             top: circleRadius + playerSize / 2 + 10 - 45,
             transform: `rotate(${angle}deg)`,
             transformOrigin: '50% 50%',
-            transition: spinning ? 'transform 3.2s cubic-bezier(0.15, 0.6, 0.15, 1)' : 'none',
+            transition: animating ? 'transform 3s cubic-bezier(0.15, 0.6, 0.15, 1)' : 'none',
+            willChange: spinning ? 'transform' : 'auto',
           }}
         >
           <svg viewBox="0 0 24 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
