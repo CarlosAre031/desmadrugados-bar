@@ -28,6 +28,9 @@ export default function Navbar() {
     { href: '#ubicacion', label: t.nav.location },
   ]
 
+  // When not scrolled, navbar is over the dark hero — always use light text
+  const overHero = !scrolled
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -37,7 +40,7 @@ export default function Navbar() {
       }`}
     >
       <nav className="max-w-7xl mx-auto px-8 sm:px-12 h-20 flex items-center justify-between">
-        {/* Logo — izquierda con padding generoso */}
+        {/* Logo */}
         <Link href="/" className="flex items-center shrink-0">
           <Image
             src="/images/logo.png"
@@ -55,7 +58,9 @@ export default function Navbar() {
             <li key={l.href}>
               <a
                 href={l.href}
-                className="font-heading text-lg tracking-wider text-foreground/80 hover:text-gold transition-colors duration-200"
+                className={`font-heading text-lg tracking-wider hover:text-gold transition-colors duration-200 ${
+                  overHero ? 'text-white/90' : 'text-foreground/80'
+                }`}
               >
                 {l.label}
               </a>
@@ -67,7 +72,9 @@ export default function Navbar() {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setLang(lang === 'es' ? 'en' : 'es')}
-            className="px-2 py-1 text-xs font-mono font-semibold border border-border rounded hover:border-gold hover:text-gold transition-colors min-h-[36px] min-w-[36px]"
+            className={`px-2 py-1 text-xs font-mono font-semibold border rounded hover:border-gold hover:text-gold transition-colors min-h-[36px] min-w-[36px] ${
+              overHero ? 'border-white/30 text-white/90' : 'border-border'
+            }`}
             aria-label="Cambiar idioma"
           >
             {lang === 'es' ? 'EN' : 'ES'}
@@ -75,14 +82,18 @@ export default function Navbar() {
           {mounted && (
             <button
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className="p-2 border border-border rounded hover:border-gold hover:text-gold transition-colors min-h-[36px] min-w-[36px] flex items-center justify-center"
+              className={`p-2 border rounded hover:border-gold hover:text-gold transition-colors min-h-[36px] min-w-[36px] flex items-center justify-center ${
+                overHero ? 'border-white/30 text-white/90' : 'border-border'
+              }`}
               aria-label="Cambiar tema"
             >
               {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
             </button>
           )}
           <button
-            className="md:hidden p-2 border border-border rounded hover:border-gold hover:text-gold transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+            className={`md:hidden p-2 border rounded hover:border-gold hover:text-gold transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center ${
+              overHero ? 'border-white/30 text-white/90' : 'border-border'
+            }`}
             onClick={() => setOpen(!open)}
             aria-label="Menú de navegación"
             aria-expanded={open}
