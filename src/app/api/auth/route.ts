@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createToken, COOKIE_NAME } from '@/lib/auth'
+import { getAdminPasswordDB, saveAdminPasswordDB } from '@/lib/db'
 
 export async function POST(req: NextRequest) {
   const { password } = await req.json()
 
-  const adminPassword = (process.env.ADMIN_PASSWORD || 'Desmadrugados2024').trim()
+  const adminPassword = (await getAdminPasswordDB()).trim()
   if (password.trim() !== adminPassword) {
     return NextResponse.json({ error: 'Contraseña incorrecta' }, { status: 401 })
   }
@@ -34,13 +35,13 @@ export async function PUT(req: NextRequest) {
     return NextResponse.json({ error: 'La nueva contraseña debe tener al menos 6 caracteres' }, { status: 400 })
   }
 
-  const adminPassword = (process.env.ADMIN_PASSWORD || 'Desmadrugados2024').trim()
+  const adminPassword = (await getAdminPasswordDB()).trim()
   if (currentPassword.trim() !== adminPassword) {
     return NextResponse.json({ error: 'Contraseña actual incorrecta' }, { status: 401 })
   }
 
-  // Update the environment variable at runtime
-  process.env.ADMIN_PASSWORD = newPassword.trim()
+  // Save to MongoDB so it persists across deploys
+  await saveAdminPasswordDB(newPassword.trim())
 
   return NextResponse.json({ success: true })
 }

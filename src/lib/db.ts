@@ -140,6 +140,31 @@ export async function saveSettingsDB(data: SettingsData): Promise<void> {
   }
 }
 
+// Admin Password
+export async function getAdminPasswordDB(): Promise<string> {
+  if (!isMongoDBConfigured()) {
+    return process.env.ADMIN_PASSWORD || 'Desmadrugados2024'
+  }
+  try {
+    await connectDB()
+    const doc = await Settings.findOne()
+    if (doc?.adminPassword) return doc.adminPassword
+    return process.env.ADMIN_PASSWORD || 'Desmadrugados2024'
+  } catch {
+    return process.env.ADMIN_PASSWORD || 'Desmadrugados2024'
+  }
+}
+
+export async function saveAdminPasswordDB(password: string): Promise<void> {
+  if (!isMongoDBConfigured()) return
+  try {
+    await connectDB()
+    await Settings.findOneAndUpdate({}, { adminPassword: password }, { upsert: true })
+  } catch (error) {
+    console.error('MongoDB error (save password):', error)
+  }
+}
+
 // Carousel
 export async function getCarouselDB(): Promise<CarouselData> {
   if (!isMongoDBConfigured()) {

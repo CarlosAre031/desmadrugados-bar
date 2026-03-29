@@ -22,6 +22,7 @@ export interface ISettingsDocument extends Document {
   hours: IHours[]
   specialNights: ISpecialNight[]
   mapEmbedUrl: string
+  adminPassword: string
 }
 
 const HoursSchema = new Schema<IHours>({
@@ -46,6 +47,7 @@ const SettingsSchema = new Schema<ISettingsDocument>({
   hours: [HoursSchema],
   specialNights: [SpecialNightSchema],
   mapEmbedUrl: { type: String, default: '' },
+  adminPassword: { type: String, default: '' },
 }, { timestamps: true })
 
 export const Settings = mongoose.models.Settings || mongoose.model<ISettingsDocument>('Settings', SettingsSchema)

@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { Plus, Pencil, Trash2, Check, X } from 'lucide-react'
+import { useState, useEffect, useRef } from 'react'
+import { Plus, Pencil, Trash2, Check, X, ImagePlus, Loader2 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { CategoryManager, type Category } from '@/components/admin/CategoryManager'
 
@@ -12,11 +12,64 @@ interface MenuItem {
   category: string
   price: number
   available: boolean
+  image: string
 }
 
 interface MenuData {
   categories: Category[]
   items: MenuItem[]
+}
+
+function ImageUploader({ image, onUpload }: { image: string; onUpload: (url: string) => void }) {
+  const inputRef = useRef<HTMLInputElement>(null)
+  const [uploading, setUploading] = useState(false)
+
+  const handleFile = async (file: File) => {
+    setUploading(true)
+    const formData = new FormData()
+    formData.append('file', file)
+    try {
+      const res = await fetch('/api/upload', { method: 'POST', body: formData })
+      const json = await res.json()
+      if (json.url) onUpload(json.url)
+    } catch (e) {
+      console.error('Upload failed', e)
+    }
+    setUploading(false)
+  }
+
+  return (
+    <div className="flex items-center gap-2">
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/jpeg,image/png,image/webp"
+        className="hidden"
+        onChange={(e) => { if (e.target.files?.[0]) handleFile(e.target.files[0]) }}
+      />
+      {image ? (
+        <div className="relative group">
+          <img src={image} alt="" className="w-10 h-10 rounded object-cover border border-border" />
+          <button
+            type="button"
+            onClick={() => inputRef.current?.click()}
+            className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity rounded flex items-center justify-center"
+          >
+            <Pencil size={12} className="text-white" />
+          </button>
+        </div>
+      ) : (
+        <button
+          type="button"
+          onClick={() => inputRef.current?.click()}
+          disabled={uploading}
+          className="w-10 h-10 border border-dashed border-border rounded flex items-center justify-center hover:border-gold hover:text-gold transition-colors"
+        >
+          {uploading ? <Loader2 size={14} className="animate-spin" /> : <ImagePlus size={14} />}
+        </button>
+      )}
+    </div>
+  )
 }
 
 function ItemRow({ item, categories, onSave, onDelete }: {
@@ -37,6 +90,9 @@ function ItemRow({ item, categories, onSave, onDelete }: {
   if (editing) {
     return (
       <tr className="border-b border-border bg-secondary/20">
+        <td className="px-3 py-2">
+          <ImageUploader image={form.image} onUpload={(url) => setForm({ ...form, image: url })} />
+        </td>
         <td className="px-3 py-2">
           <input
             className="w-full bg-card border border-gold rounded px-2 py-1 text-sm focus:outline-none"
@@ -96,6 +152,15 @@ function ItemRow({ item, categories, onSave, onDelete }: {
 
   return (
     <tr className="border-b border-border hover:bg-secondary/10 transition-colors">
+      <td className="px-3 py-3">
+        {item.image ? (
+          <img src={item.image} alt={item.name} className="w-10 h-10 rounded object-cover border border-border" />
+        ) : (
+          <div className="w-10 h-10 rounded border border-border/30 bg-secondary/20 flex items-center justify-center text-muted-foreground">
+            <ImagePlus size={14} />
+          </div>
+        )}
+      </td>
       <td className="px-3 py-3 text-sm font-medium">{item.name}</td>
       <td className="px-3 py-3 text-sm text-muted-foreground hidden sm:table-cell">{item.nameEn}</td>
       <td className="px-3 py-3 text-sm">{cat?.icon} {cat?.name}</td>
@@ -124,7 +189,7 @@ export default function MenuAdminPage() {
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [newItem, setNewItem] = useState(false)
-  const [form, setForm] = useState({ name: '', nameEn: '', category: '', price: 0, available: true })
+  const [form, setForm] = useState({ name: '', nameEn: '', category: '', price: 0, available: true, image: '' })
   const [filter, setFilter] = useState('all')
 
   useEffect(() => {
@@ -163,7 +228,7 @@ export default function MenuAdminPage() {
     const next = { ...data, items: [...data.items, item] }
     setData(next)
     save(next)
-    setForm({ name: '', nameEn: '', category: '', price: 0, available: true })
+    setForm({ name: '', nameEn: '', category: '', price: 0, available: true, image: '' })
     setNewItem(false)
   }
 
@@ -223,49 +288,52 @@ export default function MenuAdminPage() {
       {newItem && (
         <div className="mb-4 p-4 border border-gold/40 rounded bg-card">
           <p className="text-sm font-semibold mb-3">Nuevo producto</p>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-            <input
-              className="bg-background border border-border rounded px-3 py-2 text-sm focus:border-gold outline-none"
-              placeholder="Nombre ES *"
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-            />
-            <input
-              className="bg-background border border-border rounded px-3 py-2 text-sm focus:border-gold outline-none"
-              placeholder="Name EN"
-              value={form.nameEn}
-              onChange={(e) => setForm({ ...form, nameEn: e.target.value })}
-            />
-            <select
-              className="bg-background border border-border rounded px-3 py-2 text-sm focus:border-gold outline-none"
-              value={form.category}
-              onChange={(e) => setForm({ ...form, category: e.target.value })}
-            >
-              <option value="">Categoría *</option>
-              {data.categories.map((c) => (
-                <option key={c.id} value={c.id}>{c.name}</option>
-              ))}
-            </select>
-            <input
-              type="number"
-              className="bg-background border border-border rounded px-3 py-2 text-sm focus:border-gold outline-none"
-              placeholder="Precio"
-              value={form.price || ''}
-              onChange={(e) => setForm({ ...form, price: Number(e.target.value) })}
-            />
-            <div className="flex gap-2">
-              <button
-                onClick={addItem}
-                className="flex-1 py-2 bg-gold text-black font-semibold text-sm rounded hover:bg-orange-bar transition-all"
+          <div className="flex items-start gap-3">
+            <ImageUploader image={form.image} onUpload={(url) => setForm({ ...form, image: url })} />
+            <div className="flex-1 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+              <input
+                className="bg-background border border-border rounded px-3 py-2 text-sm focus:border-gold outline-none"
+                placeholder="Nombre ES *"
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+              />
+              <input
+                className="bg-background border border-border rounded px-3 py-2 text-sm focus:border-gold outline-none"
+                placeholder="Name EN"
+                value={form.nameEn}
+                onChange={(e) => setForm({ ...form, nameEn: e.target.value })}
+              />
+              <select
+                className="bg-background border border-border rounded px-3 py-2 text-sm focus:border-gold outline-none"
+                value={form.category}
+                onChange={(e) => setForm({ ...form, category: e.target.value })}
               >
-                Guardar
-              </button>
-              <button
-                onClick={() => setNewItem(false)}
-                className="px-3 py-2 border border-border rounded hover:border-red-bar hover:text-red-bar transition-all"
-              >
-                <X size={16} />
-              </button>
+                <option value="">Categoría *</option>
+                {data.categories.map((c) => (
+                  <option key={c.id} value={c.id}>{c.name}</option>
+                ))}
+              </select>
+              <input
+                type="number"
+                className="bg-background border border-border rounded px-3 py-2 text-sm focus:border-gold outline-none"
+                placeholder="Precio"
+                value={form.price || ''}
+                onChange={(e) => setForm({ ...form, price: Number(e.target.value) })}
+              />
+              <div className="flex gap-2">
+                <button
+                  onClick={addItem}
+                  className="flex-1 py-2 bg-gold text-black font-semibold text-sm rounded hover:bg-orange-bar transition-all"
+                >
+                  Guardar
+                </button>
+                <button
+                  onClick={() => setNewItem(false)}
+                  className="px-3 py-2 border border-border rounded hover:border-red-bar hover:text-red-bar transition-all"
+                >
+                  <X size={16} />
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -276,6 +344,7 @@ export default function MenuAdminPage() {
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-border bg-secondary/30">
+              <th className="px-3 py-2 text-left text-xs text-muted-foreground font-semibold w-14">Foto</th>
               <th className="px-3 py-2 text-left text-xs text-muted-foreground font-semibold">Nombre ES</th>
               <th className="px-3 py-2 text-left text-xs text-muted-foreground font-semibold hidden sm:table-cell">Name EN</th>
               <th className="px-3 py-2 text-left text-xs text-muted-foreground font-semibold">Categoría</th>
