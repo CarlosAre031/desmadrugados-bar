@@ -15,7 +15,7 @@ export default function HeroContent({ whatsapp }: Props) {
     <div className="relative z-10 text-center px-6 sm:px-4 max-w-4xl mx-auto">
       {/* Tagline */}
       <h1
-        className="font-heading text-6xl sm:text-8xl lg:text-[10rem] text-gold leading-[0.9] mb-6"
+        className="font-heading text-[clamp(2.5rem,10vw,10rem)] text-gold leading-[0.9] mb-6"
         style={{ textShadow: '0 0 40px rgba(212,160,23,0.5), 0 0 80px rgba(212,160,23,0.2)' }}
       >
         {t.hero.tagline}
